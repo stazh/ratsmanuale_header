@@ -1,1 +1,1 @@
-# ratsmanuale_header
+# Semiautomatische Aufbereitung der Sitzungstitel in den Ratsmanualen
