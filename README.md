@@ -13,6 +13,12 @@
 
 
 ## Projekt Ratsmanuale
+<p align="center">
+  <img src="images/magazin.jpg" width="170" />
+  <img src="images/2_baende.jpg" width="170" />
+  <img src="images/transkribus.jpg" width="240" />
+  <img src="images/rands.jpg" width="325" />
+</p>
 
 Die Zürcher Ratsmanuale beinhalten die Protokolle der Ratssitzungen der Obrigkeit des alten Stadtstaats Zürich (1484 - 1798). Das Projekt Ratsmanuele startete 2019 als Pilot in der Abteilung Nacherschliessung und Digitalisierung des Staatsarchivs Zürich, um
 
