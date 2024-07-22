@@ -14,10 +14,10 @@
 
 ## Projekt Ratsmanuale
 <p align="center">
-  <img src="images/magazin.jpg" width="160" />
-  <img src="images/2_baende.jpg" width="160" />
-  <img src="images/transkribus.jpg" width="227" />
-  <img src="images/rands.jpg" width="308" />
+  <img src="images/magazin.jpg" width="140" />
+  <img src="images/2_baende.jpg" width="140" />
+  <img src="images/transkribus.jpg" width="198" />
+  <img src="images/rands.jpg" width="270" />
 </p>
 
 Die Zürcher Ratsmanuale beinhalten die Protokolle der Ratssitzungen der Obrigkeit des alten Stadtstaats Zürich (1484 - 1798). Das Projekt Ratsmanuele startete 2019 als Pilot in der Abteilung Nacherschliessung und Digitalisierung des Staatsarchivs Zürich, um
@@ -52,8 +52,6 @@ Hier Beispiele aus dem ersten, letzten und einem weiteren Band:
   </table>
 </div>
 
-
-
 ## Ziele
 
 Wir möchten...
@@ -61,7 +59,10 @@ Wir möchten...
 2. strukturierte und standardisierte Daten erhalten und diese als OGD zur Verfügung stellen.
 3. die Daten mit Normdaten wie der [Gemeinsamen Normdatei](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html) anreichern.
 
-
+Konkret wollen wir am Schluss folgende Daten erhalten:
+<p align="center">
+  <img src="images/ziel.jpg" width="1000" />
+</p>
    
 ## Vorgehen
 
