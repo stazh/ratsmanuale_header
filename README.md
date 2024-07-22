@@ -57,11 +57,15 @@ Hier Beispiele aus dem ersten, letzten und einem weiteren Band:
 ## Ziele
 
 Wir möchten...
-1. Die Ratsmanuale im Archivkatalog zusätzlich auf Stufe Sitzung erschliessen
-2. Strukturierte und standardisierte Daten erhalten und diese als OGD zur Verfügung stellen
-3. Die Daten mit Normdaten wie der [Gemeinsamen Normdatei](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html) anreichern
+1. die Ratsmanuale im Archivkatalog zusätzlich auf Stufe Sitzung erschliessen.
+2. strukturierte und standardisierte Daten erhalten und diese als OGD zur Verfügung stellen.
+3. die Daten mit Normdaten wie der [Gemeinsamen Normdatei](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html) anreichern.
+
+
    
 ## Vorgehen
+
+
 
 
 
