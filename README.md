@@ -7,6 +7,7 @@
 -   [Projekt Ratsmanuale](#projekt-ratsmanuale)
 -   [Sitzungstitel̈](#sitzungstitel)
 -   [Ziele](#ziele)
+-   [Tools](#tools)
 -   [Vorgehen](#vorgehen)
   
 </details>
@@ -63,7 +64,17 @@ Konkret wollen wir am Schluss folgende Daten erhalten:
 <p align="center">
   <img src="images/ziel.jpg" width="1000" />
 </p>
-   
+
+
+## Tools
+
+Das Staatsarchiv hat für diese Zwecke zwei Tools entwickelt. Einerseits eine Schnittstelle zur Plattform Transkribus, mit welcher sich Text aus Transkribus exportieren und importieren lässt. Andererseits ein VBA-Makro, um die Daten semiautomatisch zu kuratieren und anzureichern. 
+
+<p align="left">
+  <img src="images/transkribus_api.jpg" width="700" />
+  <img src="images/makro.jpg" width="800" />
+</p>
+
 ## Vorgehen
 
 
