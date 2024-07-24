@@ -68,12 +68,26 @@ Konkret wollen wir am Schluss folgende Daten erhalten:
 
 ## Tools
 
-Das Staatsarchiv hat für diese Zwecke zwei Tools entwickelt. Einerseits eine Schnittstelle zur Plattform Transkribus, mit welcher sich Text aus Transkribus exportieren und importieren lässt. Andererseits ein VBA-Makro, um die Daten semiautomatisch zu kuratieren und anzureichern. 
+Das Staatsarchiv hat für diese Zwecke folgende Tools entwickelt:
+####  Transkribus Schnittstelle
+Mit der Schnittstelle zur Plattform Transkribus wird Text aus Textregionen in Tabellen exportiert und nach der Bearbeitung wieder importiert.
+Die lokale Version liegt auf einem öffentlichen [Github-Repository](https://github.com/stazh/TranskribusAPI).
 
 <p align="left">
-  <img src="images/transkribus_api.jpg" width="700" />
+  <img src="images/transkribus_api.jpg" width="600" />
+</p>
+
+Mittlerweile gibt es eine Webversion: [https://stazhtranskribuswebapi.streamlit.app/](https://stazhtranskribuswebapi.streamlit.app/)
+
+####  VBA Makro für einen Reiter "Ratsmanuale" in Excel
+Mit dem VBA-Makro *Ratsmanuale.xlam* werden die exportierten Daten pro Band semitautomatisch kuratiert, angereichert und für den Wiederimport auf Transkribus und die Ablage aufbereitet.
+<p align="left">
   <img src="images/makro.jpg" width="800" />
 </p>
+
+####  VBA Makro "Metadatan zusammenfügen"
+
+Mit dem VBA Makro *Metadaten_zusammenfügen.docm*  werden die aufbereiteten Metadaten pro Band zu einer Datei zusammengefügt und für den Import ins Archivinformationssystem aufbereitet.
 
 ## Vorgehen
 
