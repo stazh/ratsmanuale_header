@@ -29,11 +29,11 @@ Die Zürcher Ratsmanuale beinhalten die Protokolle der Ratssitzungen der Obrigke
 
 Am Ende des Pilotprojekts 2022 konnten sämtliche Protokolle des 18. Jahrhunderts publiziert werden. 2023 startete die Aufbereitung der restlichen Ratsmanual-Bände - nun als reguläres Projekt.
 
-[Hier](https://ratsmanuale-zuerich.transkribus.eu/) geht es zum Portal, auf welchem du auch noch weitere Informationen zum Projekt findest. 
+[Hier](https://ratsmanuale-zuerich.transkribus.eu/) geht es zum Portal, auf welchem du weitere Informationen zum Projekt findest. 
 
 ## Sitzungstitel
 
-Eine Auswertung der Bände ergab, dass die Schreiber während über 300 Jahre bei der Aufzeichnung der Sitzungstitel ein und dieselbe Konvention beizubehalten schienen: 
+Eine Auswertung der Bände ergab, dass die Schreiber während über 300 Jahren bei der Aufzeichnung der Sitzungstitel dieselbe Konvention beizubehalten schienen: 
 
 🔴 1. Datum der Sitzung
   
