@@ -65,7 +65,7 @@ Konkret wollen wir am Schluss folgende Daten erhalten:
   <img src="images/ziel.jpg" width="1000" />
 </p>
 
-Mit diesen Daten wollen wir einerseits neue Verzeichniseinheiten in unserem Archivkatalog generieren ([hier](https://suche.staatsarchiv.djiktzh.ch/detail.aspx?ID=5122678) ein Beispiel einer Verzeichniseinheit):
+Mit diesen Daten wollen wir einerseits neue Verzeichniseinheiten in unserem [Archivkatalog](https://suche.staatsarchiv.djiktzh.ch/archivplansuche.aspx?ID=245374) generieren ([hier](https://suche.staatsarchiv.djiktzh.ch/detail.aspx?ID=5122678) ein Beispiel einer Verzeichniseinheit):
 <p align="left">
   <img src="images/ais.jpg" width="700" />
 </p>
