@@ -139,7 +139,7 @@ Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch 
   <img src="images/tagging_automatisiert.png" width="700" />
 </p>
 
-*Resultat nach den automatisierten Ersetzungen:*
+*Resultat nach den automatischen Ersetzungen:*
 <p align="left">
   <img src="images/tagging_resultat.png" width="500" />
 </p>
@@ -147,7 +147,7 @@ Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch 
 
 ### 4. Metadaten mit Normdaten ergänzen (semiautomatisch)
 
-Als nächstes ergänzen wir die Tags mit Attributen. Dies geschieht semiautomtisch. Einerseits mittels Dropdownliste (Gremium) oder mittels automatisierten Ergänzungen aufgrund einer hinterlegten Liste (Ratsherren/Vorsitz). Zur Überprüfung der Sitzungs-Daten kann zudem als Hilfe der Wochentag des Datums berechnet werden und mit dem Transkript verglichen werden.
+Als nächstes ergänzen wir die Tags mit Normdaten. Dies geschieht semiautomtisch: Einerseits mittels Dropdownliste (Gremium), andererseits mittels automatisierten Ergänzungen aufgrund einer hinterlegten Liste (Ratsherren/Vorsitz). Zur Überprüfung der Sitzungs-Daten kann zudem als Hilfe der Wochentag des Datums berechnet werden und mit dem Transkript verglichen werden.
 
 <p align="left">
   <img src="images/ergänzung_metadaten.png" width="1000" />
@@ -156,6 +156,6 @@ Als nächstes ergänzen wir die Tags mit Attributen. Dies geschieht semiautomtis
 
 ### 5. Verschiedene Ausgabeformate generieren (automatisch)
 
-Zum Schluss können aus den kuratierten und angereicherten Daten mit dem Ratsmanual-Makro die verschiedenen Ausgabeformate für den Reimport in Transkribus und die Metadaten für den Archivkatalog und die OGD generiert werden (vgl. oben [Ziele](#ziele)). 
+Zum Schluss generieren wir aus den kuratierten und angereicherten Daten mit dem Ratsmanual-Makro die verschiedenen Ausgabeformate für den Reimport in Transkribus und die Metadaten für den Archivkatalog und die OGD (vgl. oben [Ziele](#ziele)). 
 
 
