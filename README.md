@@ -67,13 +67,15 @@ Konkret wollen wir am Schluss folgende Daten erhalten:
 
 Aus diesen Daten können wir einerseits die Verzeichniseinheiten in unserem Archivkatalog generieren ([hier](https://suche.staatsarchiv.djiktzh.ch/detail.aspx?ID=5122678) ein Beispiel einer Verzeichniseinheit):
 <p align="center">
-  <img src="images/ais.jpg" width="1000" />
+  <img src="images/ais.jpg" width="700" />
 </p>
 
 Andererseits können wir daraus zu einem späteren Zeitpunkt (wenn genug Daten zusammengekommen sind) für statistische Auswertungen einen OGD-Datensatz erstellen. Hier bereits eine erste Auswertung der Anzahl Sitzungen je Gremium und Wochentag der aufbereiteten Bände von 1792 - 1798:
 <p align="center">
-  <img src="images/grafik_wochentag_gremium.png" width="1000" />
+  <img src="images/grafik_wochentag_gremium.png" width="700" />
 </p>
+
+
 ## Tools
 
 Das Staatsarchiv hat für diese Zwecke folgende Tools entwickelt:
