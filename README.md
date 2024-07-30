@@ -150,7 +150,7 @@ Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch 
 Als nächstes ergänzen wir die Tags mit Attributen. Dies geschieht semiautomtisch, beispielsweise mittels Dropdownliste (Gremium) oder automatisierte Ergänzung mittels einer hinterlegten Liste (Personen). Zur Überprüfung der Daten kann zudem als Hilfe der Wochentag des Datums generiert werden und mit dem Transkript verglichen werden.
 
 <p align="left">
-  <img src="images/ergänzung_metadaten.png" width="500" />
+  <img src="images/ergänzung_metadaten.png" width="800" />
 </p>
 
 
