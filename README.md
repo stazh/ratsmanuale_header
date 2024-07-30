@@ -5,7 +5,7 @@
 <summary>Inhaltsverzeichnis</summary>
 
 -   [Projekt Ratsmanuale](#projekt-ratsmanuale)
--   [Sitzungstitel̈](#sitzungstitel)
+-   [Sitzungstitel](#sitzungstitel)
 -   [Ziele](#ziele)
 -   [Tools](#tools)
 -   [Vorgehen](#vorgehen)
@@ -57,7 +57,7 @@ Hier Beispiele aus dem ersten, letzten und einem weiteren Band:
 
 Wir möchten...
 1. die Ratsmanuale im Archivkatalog zusätzlich auf Stufe Sitzung erschliessen.
-2. strukturierte und standardisierte Daten erhalten und diese als OGD zur Verfügung stellen.
+2. strukturierte und standardisierte Daten erhalten und diese als [OGD](https://www.zh.ch/de/politik-staat/opendata.zhweb-noredirect.zhweb-cache.html?keywords=ogd#/) zur Verfügung stellen.
 3. die Daten mit Normdaten wie der [Gemeinsamen Normdatei](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html) anreichern.
 
 Konkret wollen wir am Schluss folgende Daten erhalten:
