@@ -107,6 +107,21 @@ Mit einem weiteren VBA Makro werden die aufbereiteten Metadaten pro Band zu eine
 
 ## Vorgehen
 
+#### 1. Originalseitenzahlen korrigieren
+
+
+#### 2. Textkorrektur (manuell)
+
+
+#### 3. Tagging und Textkorrektur (automatisch)
+
+
+
+#### 4. Metadaten mit Normdaten ergänzen (semiautomatisch)
+
+
+
+#### 5. Verschiedene Ausgabeformate generieren (automatisch)
 
 
 
