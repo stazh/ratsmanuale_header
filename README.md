@@ -141,7 +141,7 @@ Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch 
 
 *Resultat nach den automatischen Ersetzungen:*
 <p align="left">
-  <img src="images/tagging_resultat.png" width="500" />
+  <img src="images/tagging_resultat.png" width="700" />
 </p>
 
 
