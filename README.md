@@ -61,23 +61,23 @@ Wir möchten...
 3. die Daten mit Normdaten wie der [Gemeinsamen Normdatei](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html) anreichern.
 
 Konkret wollen wir am Schluss folgende Daten erhalten:
-<p align="center">
+<p align="left">
   <img src="images/ziel.jpg" width="1000" />
 </p>
 
 Mit diesen Daten wollen wir einerseits neue Verzeichniseinheiten in unserem Archivkatalog generieren ([hier](https://suche.staatsarchiv.djiktzh.ch/detail.aspx?ID=5122678) ein Beispiel einer Verzeichniseinheit):
-<p align="center">
+<p align="left">
   <img src="images/ais.jpg" width="700" />
 </p>
 
 Andererseits möchten wir zu einem späteren Zeitpunkt (wenn genug Daten zusammengekommen sind) für statistische Auswertungen einen OGD-Datensatz erstellen. Hier bereits eine erste Auswertung der Anzahl Sitzungen je Gremium und Wochentag der aufbereiteten Bände von 1792 - 1798:
-<p align="center">
+<p align="left">
   <img src="images/grafik_wochentag_gremium.png" width="700" />
 </p>
 
 Zudem möchten wir die Daten mit unserer [Transkribus Schnittstelle](#transkribus-schnittstelle) reimportieren: 
 
-<p align="center">
+<p align="left">
   <img src="images/transkribus_resultat.png" width="700" />
 </p>
 
@@ -85,7 +85,7 @@ Zudem möchten wir die Daten mit unserer [Transkribus Schnittstelle](#transkribu
 ## Tools
 
 Das Staatsarchiv hat für diese Zwecke folgende Tools entwickelt:
-####  Transkribus Schnittstelle
+###  Transkribus Schnittstelle
 Mit der Schnittstelle zur Plattform Transkribus wird Text aus Textregionen in Tabellen exportiert und nach der Bearbeitung wieder importiert.
 Die lokale Version liegt auf einem öffentlichen [Github-Repository](https://github.com/stazh/TranskribusAPI).
 
@@ -95,33 +95,49 @@ Die lokale Version liegt auf einem öffentlichen [Github-Repository](https://git
 
 Mittlerweile gibt es eine Webversion: [https://stazhtranskribuswebapi.streamlit.app/](https://stazhtranskribuswebapi.streamlit.app/)
 
-####  VBA Makro für einen Reiter "Ratsmanuale" in Excel
+###  VBA Makro für einen Reiter "Ratsmanuale" in Excel
 Mit dem VBA-Makro *Ratsmanuale.xlam* werden die exportierten Daten pro Band semitautomatisch kuratiert, angereichert und für den Wiederimport auf Transkribus und die Ablage aufbereitet.
 <p align="left">
   <img src="images/makro.jpg" width="800" />
 </p>
 
-####  VBA Makro "Metadatan zusammenfügen"
+###  VBA Makro "Metadatan zusammenfügen"
 
 Mit einem weiteren VBA Makro werden die aufbereiteten Metadaten pro Band zu einer Datei zusammengefügt und für den Import ins Archivinformationssystem aufbereitet.
 
 ## Vorgehen
 
-#### 1. Originalseitenzahlen korrigieren
+Mit diesen Tools können wir nun die Sitzungstitel-Daten mit folgenden Arbeitsschritten semiautomatisch aufbereiten:
+
+### 1. Originalseitenzahlen korrigieren
+
+Als erstes wir die Originalseitenzahlen korrigieren, damit Start- und Endseite der einzelnen Sitzungen automatisch berechnet werden können (diese werden Bestandteil der Signatur). Das geht üblicherweise relativ einfach und grösstenteils automatisch: 
+
+1. Seitenzahl-Textregionen aus Transkribus exportieren
+2. Seitenzahlen in Excel automatisch aufnummerieren
+3. Korrigierte Seitenzahl-Textregionen in Transkribus reimportieren
+
+In seltenen Fällen ist die Seitennummerierung fehlerhaft im Original, wie folgendes Beispiel zeigt: 
+<p align="left">
+  <img src="images/seitenzahl_spezialfall.png" width="300" />
+</p>
+
+Diese Fälle müssen wir manuell erfassen. 
+
+### 2. Textkorrektur (manuell)
+Nach einem Export aller Sitzungstitel gehen wir den Text kurz durch und machen allenfalls ein paar kleinere manuelle Korrekturen. Die automatische Texterkennung funktioniert aber gerade bei den Sitzungstiteln sehr gut, da die Textelemente sehr häufig sind.
+<p align="left">
+  <img src="images/textkorrektur_manuell.png" width="300" />
+</p>
+### 3. Tagging und Textkorrektur (automatisch)
 
 
-#### 2. Textkorrektur (manuell)
 
-
-#### 3. Tagging und Textkorrektur (automatisch)
-
-
-
-#### 4. Metadaten mit Normdaten ergänzen (semiautomatisch)
+### 4. Metadaten mit Normdaten ergänzen (semiautomatisch)
 
 
 
-#### 5. Verschiedene Ausgabeformate generieren (automatisch)
+### 5. Verschiedene Ausgabeformate generieren (automatisch)
 
 
 
