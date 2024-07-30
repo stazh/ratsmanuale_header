@@ -136,7 +136,7 @@ Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch 
 
 *Liste mit automatischen Ersetzungen:*
 <p align="left">  
-  <img src="images/tagging_automatisiert.png" width="500" />
+  <img src="images/tagging_automatisiert.png" width="700" />
 </p>
 
 *Resultat nach den automatisierten Ersetzungen:*
@@ -147,10 +147,15 @@ Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch 
 
 ### 4. Metadaten mit Normdaten ergänzen (semiautomatisch)
 
+Als nächstes ergänzen wir die Tags mit Attributen. Dies geschieht semiautomtisch, beispielsweise mittels Dropdownliste (Gremium) oder automatisierte Ergänzung mittels einer hinterlegten Liste (Personen). Zur Überprüfung der Daten kann zudem als Hilfe der Wochentag des Datums generiert werden und mit dem Transkript verglichen werden.
+
+<p align="left">
+  <img src="images/ergänzung_metadaten.png" width="500" />
+</p>
 
 
 ### 5. Verschiedene Ausgabeformate generieren (automatisch)
 
-
+Zum Schluss können aus den kuratierten und angereicherten Daten mit dem Ratsmanual-Makro die verschiedenen Ausgabeformate für den Reimport in Transkribus und die Metadaten für den Archivkatalog und die OGD generiert werden (vgl. oben [Ziele](#ziele)). 
 
 
