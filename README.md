@@ -127,10 +127,22 @@ Diese Fälle müssen wir manuell erfassen.
 ### 2. Textkorrektur (manuell)
 Nach einem Export aller Sitzungstitel gehen wir den Text kurz durch und machen allenfalls ein paar kleinere manuelle Korrekturen. Die automatische Texterkennung funktioniert aber gerade bei den Sitzungstiteln sehr gut, da die Textelemente sehr häufig sind.
 <p align="left">
-  <img src="images/textkorrektur_manuell.png" width="300" />
+  <img src="images/textkorrektur_manuell.png" width="500" />
 </p>
+
 ### 3. Tagging und Textkorrektur (automatisch)
 
+Serielle Textkorrekturen und das Tagging können wir grösstenteils automatisch vornehmen. Im Ratsmanual-Makro haben wir eine Hilfsmittel implementiert, das gemäss einer Liste automatische Ersetzungen vornimmt. Diese Liste kann stetig ergänzt und angepasst werden.
+
+*Liste mit automatischen Ersetzungen:*
+<p align="left">  
+  <img src="images/tagging_automatisiert.png" width="500" />
+</p>
+
+*Resultat nach den automatisierten Ersetzungen:*
+<p align="left">
+  <img src="images/tagging_resultat.png" width="500" />
+</p>
 
 
 ### 4. Metadaten mit Normdaten ergänzen (semiautomatisch)
