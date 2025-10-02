@@ -1,0 +1,489 @@
+
+
+
+Sub metadatenAufbereiten_sub(control As IRibbonControl)
+    Dim Ursprungssheet As Object
+    Dim rng As Range, i As Integer
+    Set Ursprungssheet = Application.ActiveSheet
+    Dim LZ As Long
+    LZ = Ursprungssheet.Cells(Ursprungssheet.Rows.Count, 2).End(xlUp).Row
+    Ursprungssheet.Shapes.SelectAll
+    Selection.Placement = xlMoveAndSize
+    Set NeuesArbeitsbuch = Workbooks.Add
+    Set NeueMetadaten = NeuesArbeitsbuch.Sheets.Add
+        With NeueMetadaten
+            Ursprungssheet.Range("A:A").Copy .Range("A1")
+            .Range("A1").Value = "Dokument Id"
+            Ursprungssheet.Range("C:C").Copy .Range("B1")
+            .Range("B1").Value = "Region Name"
+            Ursprungssheet.Range("D:D").Copy .Range("C1")
+            .Range("C1").Value = "SeitenNr"
+            Ursprungssheet.Range("E:E").Copy .Range("D1")
+            .Range("D1").Value = "Nummer auf Seite"
+            Ursprungssheet.Range("F:F").Copy .Range("E1")
+            .Range("E1").Value = "Text"
+            Ursprungssheet.Range("G:G").Copy .Range("F1")
+            .Range("F1").Value = "Textregion Id"
+            Ursprungssheet.Range("H:H").Copy .Range("G1")
+            .Range("G1").Value = "Customs"
+            .Range("H1").Value = "Default Tags"
+            .Range("H2").FormulaR1C1 = _
+                "=IF(AND(CONCATENATE(RC[-6],RC[-5],RC[-4])=CONCATENATE(R[1]C[-6],R[1]C[-5],R[1]C[-4]),NOT(CONCATENATE(RC[-6],RC[-5],RC[-4])=CONCATENATE(R[-1]C[-6],R[-1]C[-5],R[-1]C[-4]))),CONCATENATE(""$d"",RC[-3]),SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(RC[-3],""und Bürger"",""und" & _
+                " Burger""),""Bür"",""$pBür""),""Beyde"",""$oBeyde""),""beyde"",""$obeyde""),""Räthen"",""Rätheno$""),""beide"",""$obeide""),""Beide"",""$oBeide""),""und Burger"",""und Burgero$""),""Rat"",""$oRat""),""Räth "",""$oRäth ""),""Rat "",""$oRat ""),""Rat."",""Rato$.""),""Räth."",""Rätho$.""))" & _
+                ""
+            .Range("H2").AutoFill Destination:=Range("H2:H" & LZ)
+            .Range("I1").Value = "Reiner Text für Formel"
+            .Range("I2").FormulaR1C1 = "=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(RC[3],""$d"",""""),""d$"",""""),""$p"",""""),""p$"",""""),""o$"",""""),""$o"","""")"
+            .Range("I2").AutoFill Destination:=Range("I2:I" & LZ)
+
+            'Ursprungssheet.Range("I2:I1000").Copy .Range("K2")
+            .Cells.RowHeight = 40
+            Ursprungssheet.Cells.RowHeight = 40
+            Dim sh As Shape
+            Dim cellcounter As Integer
+            cellcounter = 2
+            For Each sh In Ursprungssheet.Shapes
+                'sh.LockAspectRatio = msoFalse
+                'sh.Placement = xlMove
+                sh.Copy
+                .Range("K" & cellcounter).PasteSpecial
+                cellcounter = cellcounter + 1
+            Next sh
+            .Columns("K:K").ColumnWidth = 50
+            .Range("K1").Value = "Bild"
+            .Range("L1").Value = "Text zu bearbeiten"
+
+            .Range("H2:H" & LZ).Copy
+            'Hier noch farbige Tags
+            .Range("L2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+
+            For Each rng In .Range(Cells(2, 12), Cells(LZ, 12))
+                i = InStr(rng, "$d")
+                If i > 0 Then
+                    rng.Characters(i, 2).Font.Color = RGB(255, 0, 0)
+                End If
+                i = InStr(rng, "d$")
+                If i > 0 Then
+                    rng.Characters(i, 2).Font.Color = RGB(255, 0, 0)
+                End If
+                i = InStr(rng, "$p")
+                If i > 0 Then
+                    rng.Characters(i, 2).Font.Color = RGB(0, 0, 255)
+                End If
+                i = InStr(rng, "p$")
+                If i > 0 Then
+                    rng.Characters(i, 2).Font.Color = RGB(0, 0, 255)
+                End If
+                i = InStr(rng, "$o")
+                If i > 0 Then
+                    rng.Characters(i, 2).Font.Color = RGB(0, 255, 0)
+                End If
+                i = InStr(rng, "o$")
+                If i > 0 Then
+                    rng.Characters(i, 2).Font.Color = RGB(0, 255, 0)
+                End If
+                
+            Next
+            
+            .Range("M1").Value = "Wochentag"
+            .Range("N1").Value = "Datum"
+            .Columns("N:N").FormatConditions.Add Type:=xlExpression, Formula1:="=NICHT(ISTFEHLER(FINDEN(""d$"";L1)))"
+            .Columns("N:N").FormatConditions(.Columns("N:N").FormatConditions.Count).SetFirstPriority
+            With .Columns("N:N").FormatConditions(1).Interior
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent2
+                .TintAndShade = 0.599963377788629
+            End With
+            .Columns("N:N").FormatConditions(1).StopIfTrue = False
+            .Columns("N:N").FormatConditions.Add Type:=xlExpression, Formula1:="=NICHT(ISTFEHLER(FINDEN(""$d"";L1)))"
+            .Columns("N:N").FormatConditions(.Columns("N:N").FormatConditions.Count).SetFirstPriority
+            With .Columns("N:N").FormatConditions(1).Interior
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent2
+                .TintAndShade = 0.599963377788629
+            End With
+            .Columns("N:N").FormatConditions(1).StopIfTrue = False
+            .Range("O1").Value = "Person GND"
+            .Range("P1").Value = "Person SSRQ"
+            .Range("P2").FormulaR1C1 = "=IFERROR(IF(NOT(ISBLANK(INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C13:R3257C13,MATCH(RC[-1],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)))),INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C13:R3257C13,MATCH(RC[-1],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)),""unbekannt""),"""")"
+            .Range("P2").AutoFill Destination:=Range("P2:P" & LZ)
+            .Range("Q1").Value = "Person HLS"
+            .Range("Q2").FormulaR1C1 = "=IFERROR(SUBSTITUTE(IF(NOT(ISBLANK(INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C15:R3257C15,MATCH(RC[-2],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)))),INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C15:R3257C15,MATCH(RC[-2],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)),""unbekannt""),""https://"",""""),"""")"
+            .Range("Q2").AutoFill Destination:=Range("Q2:Q" & LZ)
+            .Range("R1").Value = "Person Funktion"
+            .Range("R2").FormulaR1C1 = "=IFERROR(IF(NOT(ISBLANK(INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C9:R3257C9,MATCH(RC[-3],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)))),INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C9:R3257C9,MATCH(RC[-3],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)),""unbekannt""),"""")"
+            .Range("R2").AutoFill Destination:=Range("R2:R" & LZ)
+            .Range("S1").Value = "Person Vorname"
+            .Range("S2").FormulaR1C1 = "=IFERROR(IF(NOT(ISBLANK(INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C3:R3257C3,MATCH(RC[-4],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)))),INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C3:R3257C3,MATCH(RC[-4],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)),""unbekannt""),"""")"
+            .Range("S2").AutoFill Destination:=Range("S2:S" & LZ)
+            .Range("T1").Value = "Person Nachname"
+            .Range("T2").FormulaR1C1 = "=IFERROR(IF(NOT(ISBLANK(INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C2:R3257C2,MATCH(RC[-5],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)))),INDEX('I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C2:R3257C2,MATCH(RC[-5],'I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS\[Zuercher_Rat_1225_1798.xlsx]Einsitze'!R2C14:R3257C14,0)),""unbekannt""),"""")"
+            .Range("T2").AutoFill Destination:=Range("T2:T" & LZ)
+                    
+            .Columns("O:T").FormatConditions.Add Type:=xlExpression, Formula1:="=NICHT(ISTFEHLER(FINDEN(""p$"";$L1)))"
+            .Columns("O:T").FormatConditions(.Columns("O:T").FormatConditions.Count).SetFirstPriority
+            With .Columns("O:T").FormatConditions(1).Interior
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent5
+                .TintAndShade = 0.599963377788629
+            End With
+            .Columns("O:T").FormatConditions(1).StopIfTrue = False
+            .Columns("O:T").FormatConditions.Add Type:=xlExpression, Formula1:="=NICHT(ISTFEHLER(FINDEN(""$p"";$L1)))"
+            .Columns("O:T").FormatConditions(.Columns("O:T").FormatConditions.Count).SetFirstPriority
+            With .Columns("O:T").FormatConditions(1).Interior
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent5
+                .TintAndShade = 0.599963377788629
+            End With
+            .Columns("O:T").FormatConditions(1).StopIfTrue = False
+            .Range("U1").Value = "Gremium"
+            .Columns("U:U").FormatConditions.Add Type:=xlExpression, Formula1:="=NICHT(ISTFEHLER(FINDEN(""o$"";L1)))"
+            .Columns("U:U").FormatConditions(.Columns("U:U").FormatConditions.Count).SetFirstPriority
+            With .Columns("U:U").FormatConditions(1).Interior
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent6
+                .TintAndShade = 0.599963377788629
+            End With
+            .Columns("U:U").FormatConditions(1).StopIfTrue = False
+            .Columns("U:U").FormatConditions.Add Type:=xlExpression, Formula1:="=NICHT(ISTFEHLER(FINDEN(""$o"";L1)))"
+            .Columns("U:U").FormatConditions(.Columns("U:U").FormatConditions.Count).SetFirstPriority
+            With .Columns("U:U").FormatConditions(1).Interior
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent6
+                .TintAndShade = 0.599963377788629
+            End With
+            .Columns("U:U").FormatConditions(1).StopIfTrue = False
+            .Range("U2:U" & LZ).Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="Kleiner Rat, Neuer Rat, Grosser Rat"
+            .Range("V1").Value = "Date Tag"
+            .Range("V2").FormulaR1C1 = "=IF(NOT(RC[-8]=""""),IF(AND(NOT(ISERROR(FIND(""$d"",RC[-10]))),NOT(ISERROR(FIND(""d$"",RC[-10])))),CONCATENATE(""date {offset:"",FIND(""$d"",RC[-10])-1,""; length:"",FIND(""d$"",SUBSTITUTE(RC[-10],""$d"",""""))-FIND(""$d"",RC[-10]),"";year:"",LEFT(RC[-8],4),"";month:"",MID(RC[-8],6,2),"";day:"",RIGHT(RC[-8],2),""}""),IF(NOT(ISERROR(FIND(""$d"",RC[-10]))),CONCATENATE" & _
+                    "(""date {offset:"",FIND(""$d"",RC[-10])-1,""; length:"",LEN(RC[-13])-(FIND(""$d"",RC[-10])-1),"";continued:true;year:"",LEFT(RC[-8],4),"";month:"",MID(RC[-8],6,2),"";day:"",RIGHT(RC[-8],2),""}""),CONCATENATE(""date {offset:0; length:"",FIND(""d$"",RC[-10])-1,"";continued:true;year:"",LEFT(RC[-8],4),"";month:"",MID(RC[-8],6,2),"";day:"",RIGHT(RC[-8],2),""}""))),"""")" & _
+                    ""
+            .Range("V2").AutoFill Destination:=Range("V2:V" & LZ)
+            .Range("W1").Value = "Person Tag"
+            .Range("W2").FormulaR1C1 = _
+                    "=IF(NOT(RC[-3]=""""),IF(AND(NOT(ISERROR(FIND(""$p"",RC[-11]))),NOT(ISERROR(FIND(""p$"",RC[-11])))),CONCATENATE(""person {offset:"",FIND(""$p"",SUBSTITUTE(SUBSTITUTE(RC[-11],""$d"",""""),""d$"",""""))-1,""; length:"",FIND(""p$"",SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(RC[-11],""$d"",""""),""d$"",""""),""$p"",""""))-FIND(""$p"",SUBSTITUTE(SUBSTITUTE(RC[-11],""$d"",""""),""d$" & _
+                    ""","""")),"";gnd:"",RC[-8],"";ssrq:"",RC[-7],"";hls:"",RC[-6],"";occupation:"",RC[-5],"";firstname:"",RC[-4],"";lastname:"",RC[-3],""}""),IF(NOT(ISERROR(FIND(""$p"",RC[-11]))),CONCATENATE(""person {offset:"",FIND(""$p"",SUBSTITUTE(SUBSTITUTE(RC[-11],""$d"",""""),""d$"",""""))-1,""; length:"",LEN(RC[-14])-FIND(""$p"",SUBSTITUTE(SUBSTITUTE(RC[-11],""$d"",""""),""d$""," & _
+                    """""))+1,"";continued:true;gnd:"",RC[-8],"";ssrq:"",RC[-7],"";hls:"",RC[-6],"";occupation:"",RC[-5],"";firstname:"",RC[-4],"";lastname:"",RC[-3],""}""),CONCATENATE(""person {offset:0; length:"",FIND(""p$"",SUBSTITUTE(SUBSTITUTE(RC[-11],""$d"",""""),""d$"",""""))-1,"";continued:true;gnd:"",RC[-8],"";ssrq:"",RC[-7],"";hls:"",RC[-6],"";occupation:"",RC[-5],"";firstname" & _
+                    ":"",RC[-4],"";lastname:"",RC[-3],""}""))),"""")" & _
+                    ""
+            .Range("W2").AutoFill Destination:=Range("W2:W" & LZ)
+            .Range("X2").FormulaR1C1 = _
+                    "=IF(NOT(RC[-3]=""""),IF(AND(NOT(ISERROR(FIND(""$o"",RC[-12]))),NOT(ISERROR(FIND(""o$"",RC[-12])))),CONCATENATE(""organization{offset:"",FIND(""$o"",SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(RC[-12],""$p"",""""),""p$"",""""),""d$"",""""),""$d"",""""))-1,""; length:"",FIND(""o$"",SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(RC[-12],""$p"",""""),""p$"",""""),""$o"",""""))-FIND(""$o"",SUBSTITUTE(SUBSTITUTE(RC[-12],""$p"","""")" & _
+                    ",""p$"","""")),"";type:"",RC[-3],""}""),IF(NOT(ISERROR(FIND(""$o"",RC[-12]))),CONCATENATE(""organization {offset:"",FIND(""$o"",SUBSTITUTE(SUBSTITUTE(RC[-12],""$p"",""""),""p$"",""""))-1,""; length:"",LEN(RC[-15])-FIND(""$o"",SUBSTITUTE(SUBSTITUTE(RC[-12],""$p"",""""),""p$"",""""))+1,"";continued:true;type:"",RC[-3],""}""),CONCATENATE(""organization {offset:0; lengt" & _
+                    "h:"",FIND(""o$"",SUBSTITUTE(SUBSTITUTE(RC[-12],""$p"",""""),""p$"",""""))-1,"";continued:true;type:"",RC[-3],""}""))),"""")" & _
+                    ""
+            .Range("X2").AutoFill Destination:=Range("X2:X" & LZ)
+            .Range("Y2").FormulaR1C1 = "=CONCATENATE(LEFT(RC[-19],23),"" structure {type:header;} "",RC[-3],RC[-2],RC[-1])"
+            .Range("Y2").AutoFill Destination:=Range("Y2:Y" & LZ)
+            .Range("X1").Value = "Organization Tag"
+            .Range("Y1").Value = "Tag Total"
+            .Range("A1:Y1").Font.Name = "Arial Black"
+            .Range("A1:Y1").Font.Size = 10
+            .Range("A1:Y1").Borders.LineStyle = xlContinuous
+            .Range("A1:Y1").WrapText = True
+            .Range("A1:Y1").VerticalAlignment = xlTop
+            
+        End With
+    
+    Dim DateienPfad As String
+    Dim dName As String
+    dName = InputBox("Bitte Signatur des Bandes im Format ""B_II_XXXX"" eingeben:")
+    NeueMetadaten.Range("AA1").Value = dName
+    DateienPfad = "I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\jpg\" & dName & "\"
+    
+    Dim Zelle As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set fo = fso.GetFolder(DateienPfad)
+    Dim counter As Integer
+    counter = 0
+    Dim xteDatei
+    Dim technischeSeite As String
+    For Each Zelle In NeueMetadaten.Range("J2:J" & LZ)
+        counter = 0
+        technischeSeite = NeueMetadaten.Range("C" & Zelle.Row).Value
+        For Each f In fo.Files
+            counter = counter + 1
+            xteDatei = Trim(Str(counter))
+            If technischeSeite = xteDatei Then
+                NeueMetadaten.Hyperlinks.Add Anchor:=NeueMetadaten.Range("J" & Zelle.Row), Address:=f.Path
+                Zelle.Value = "Bild_S." & technischeSeite
+                GoTo NextZelle
+            End If
+        Next f
+NextZelle:
+    Next Zelle
+    Dim dateiname As String
+    dateiname = dName & "_Metadaten_Aufbereitung"
+    With ActiveWorkbook.WebOptions
+        .RelyOnCSS = True
+        .OrganizeInFolder = True
+        .UseLongFileNames = True
+        .DownloadComponents = False
+        .RelyOnVML = False
+        .AllowPNG = True
+        .ScreenSize = msoScreenSize1024x768
+        .PixelsPerInch = 96
+        .Encoding = msoEncodingUTF8
+    End With
+    Application.Dialogs(xlDialogSaveAs).Show (dateiname)
+
+    
+Ende:
+   
+End Sub
+Sub suchen_ersetzen_sub(control As IRibbonControl)
+Dim Suchen_Arr As Variant
+Dim Ersetzen_Arr As Variant
+
+Dim Datwb As Workbook
+Set Datwb = Workbooks.Open("I:/06_Abteilung_Editionsprojekte/Produktive_Daten_Projekt_PVQ/Ratsmanual_B_II_6-1060/Metadaten_und_QS/autom-Tagvergabe_Metadaten_QS.xlsx")
+Dim Datsheet As Worksheet
+Set Datsheet = Datwb.Worksheets(1)
+Suchen_Arr = Datsheet.Range(Cells(1, 1), Cells(Range("A:A").SpecialCells(xlCellTypeLastCell).Row, 1)).Value
+Ersetzen_Arr = Datsheet.Range(Cells(1, 2), Cells(Range("B:B").SpecialCells(xlCellTypeLastCell).Row, 2)).Value
+Datwb.Close SaveChanges:=False
+Dim Suchbegriff As String
+Dim Ersetzbegriff As String
+Dim tempText As String
+Dim j As Long
+Dim i As Long
+For j = 1 To UBound(Suchen_Arr)
+    Suchbegriff = Suchen_Arr(j, 1)
+    Ersetzbegriff = Ersetzen_Arr(j, 1)
+    N = Cells(Rows.Count, "L").End(xlUp).Row
+    For i = 2 To N
+        tempText = Cells(i, "L").Value
+        tempText = Replace(tempText, Suchbegriff, Ersetzbegriff)
+        Cells(i, "L").Value = tempText
+    Next
+
+Next
+Set Datsheet = Nothing
+
+End Sub
+Sub wochentagberechnen_sub(control As IRibbonControl)
+    Dim N As Long, i As Long
+    Dim DatArray() As String
+    Dim Jahr As Integer
+    Dim Monat As Integer
+    Dim tag As Integer
+    Dim Wochentag As String
+
+    Dim JDatum
+    Dim JM As Integer
+    Dim JY As Integer
+    Dim JD As Integer
+
+    Dim d As Integer
+    Dim m As Integer
+    Dim y As Integer
+    Dim y1 As Integer
+    Dim c As Integer
+    Dim c1 As Integer
+    Dim w As Integer
+    Dim julianischesDatum As Boolean
+    
+    
+    N = Cells(Rows.Count, "N").End(xlUp).Row
+    Dim datum
+    For i = 2 To N
+        If Len(Cells(i, "N").Value) = 10 Then
+            datum = Cells(i, "N").Value
+            DatArray = Split(datum, ".")
+            
+            Jahr = CInt(DatArray(0))
+            Monat = CInt(DatArray(1))
+            tag = CInt(DatArray(2))
+
+            If Jahr <= 1700 Then
+                julianischesDatum = True
+            Else
+                julianischesDatum = False
+            End If
+
+            If julianischesDatum Then
+                JD = tag
+                If Monat > 2 Then
+                    JY = Jahr
+                    JM = Monat
+                Else
+                    JY = Jahr - 1
+                    JM = Monat + 12
+                End If
+                JDatum = Fix(365.25 * (JY + 4716)) + Fix(30.6001 * (JM + 1)) + JD + 0.5 - 1524.5
+                w = (JDatum + 1) Mod 7
+            Else
+                d = tag
+                m = getM(Monat)
+
+                If Monat = 1 Or Monat = 2 Then
+                    y1 = CInt(Right(DatArray(0), 2))
+                    If y1 = 0 Then
+                        y = 99
+                    Else
+                        y = y1 - 1
+                    End If
+                Else
+                    y = CInt(Right(DatArray(0), 2))
+                End If
+
+                If Monat = 1 Or Monat = 2 Then
+                    c1 = CInt(Left(DatArray(0), 2))
+                    If y1 = 0 Then
+                        c = c1 - 1
+                    Else
+                        c = c1
+                    End If
+                Else
+                    c = CInt(Left(DatArray(0), 2))
+                End If
+                w = (d + Fix(2.6 * m - 0.2) + y + Fix(y / 4) + Fix(c / 4) - (2 * c)) Mod 7
+                If w < 0 Then
+                    w = w + 7
+                End If
+            End If
+
+            Wochentag = getDay(w)
+            
+            Cells(i, "M").Value = Wochentag
+        End If
+    Next i
+End Sub
+Public Function getDay(TagAlsZahl As Integer) As String
+Select Case TagAlsZahl
+    Case 1
+        getDay = "Montag"
+    Case 2
+        getDay = "Dienstag"
+    Case 3
+        getDay = "Mittwoch"
+    Case 4
+        getDay = "Donnerstag"
+    Case 5
+        getDay = "Freitag"
+    Case 6
+        getDay = "Samstag"
+    Case 0
+        getDay = "Sonntag"
+    Case Else
+        getDay = "Da stimmt etwas nicht"
+End Select
+End Function
+
+Public Function getM(Monat As Integer) As Integer
+Select Case Monat
+    Case 1
+        getM = 11
+    Case 2
+        getM = 12
+    Case 3
+        getM = 1
+    Case 4
+        getM = 2
+    Case 5
+        getM = 3
+    Case 6
+        getM = 4
+    Case 7
+        getM = 5
+    Case 8
+        getM = 6
+    Case 9
+        getM = 7
+    Case 10
+        getM = 8
+    Case 11
+        getM = 9
+    Case 12
+        getM = 10
+    Case Else
+        getM = 0
+End Select
+End Function
+Sub metadatenAufbereitenPN_sub(control As IRibbonControl)
+    Dim Ursprungssheet As Object
+    
+    Set Ursprungssheet = Application.ActiveSheet
+    ' Neue excel Datei oeffnen
+    Ursprungssheet.Shapes.SelectAll
+    Selection.Placement = xlMoveAndSize
+    Set NeuesArbeitsbuch = Workbooks.Add
+    Set NeueMetadaten = NeuesArbeitsbuch.Sheets.Add
+    Dim LZ As Long
+    LZ = Ursprungssheet.Cells(Ursprungssheet.Rows.Count, 2).End(xlUp).Row
+    
+    With NeueMetadaten
+        Ursprungssheet.Range("A:A").Copy .Range("A1")
+        .Range("A1").Value = "Dokument Id"
+        Ursprungssheet.Range("C:C").Copy .Range("B1")
+        .Range("B1").Value = "Region Name"
+        Ursprungssheet.Range("D:D").Copy .Range("C1")
+        .Range("C1").Value = "SeitenNr"
+        Ursprungssheet.Range("E:E").Copy .Range("D1")
+        .Range("D1").Value = "Nummer auf Seite"
+        Ursprungssheet.Range("F:F").Copy .Range("E1")
+        .Range("E1").Value = "Text"
+        Ursprungssheet.Range("G:G").Copy .Range("F1")
+        .Range("F1").Value = "Textregion Id"
+        Ursprungssheet.Range("H:H").Copy .Range("G1")
+        .Range("G1").Value = "Customs"
+        Ursprungssheet.Range("I:I").Copy .Range("H1")
+        .Range("H1").Value = "Bild"
+        Ursprungssheet.Range("F:F").Copy .Range("I1")
+        .Range("I1").Value = "Text zu bearbeiten"
+        .Columns("I:I").NumberFormat = "@"
+        
+        .Range("I2:I108").Interior.Pattern = xlSolid
+        .Range("I2:I108").Interior.PatternColorIndex = xlAutomatic
+        .Range("I2:I108").Interior.ThemeColor = xlThemeColorAccent4
+        .Range("I2:I108").Interior.TintAndShade = 0.799981688894314
+        .Range("I2:I108").Interior.PatternTintAndShade = 0
+    
+        .Range("J2:J108").Interior.Pattern = xlSolid
+        .Range("J2:J108").Interior.PatternColorIndex = xlAutomatic
+        .Range("J2:J108").Interior.ThemeColor = xlThemeColorAccent2
+        .Range("J2:J108").Interior.TintAndShade = 0.799981688894314
+        .Range("J2:J108").Interior.PatternTintAndShade = 0
+        .Range("J2").FormulaR1C1 = "1"
+        .Range("J3").FormulaR1C1 = "2"
+        .Range("J2:J3").AutoFill Destination:=Range("J2:J" & LZ)
+
+        .Range("J1").Value = "erfasse Seitenzahl"
+        .Range("K1").Value = "Seitenzahl Tag"
+        .Range("K2").FormulaR1C1 = "=CONCATENATE(RC[-4], "" page {offset:0; length:"",LEN(RC[-2]),"";nr:"",RC[-1],"";}"")"
+        .Range("K2").AutoFill Destination:=Range("K2:K" & LZ)
+        .Range("A1:K1").Font.Name = "Arial Black"
+        .Range("A1:K1").Font.Size = 10
+        .Range("A1:K1").Borders.LineStyle = xlContinuous
+        .Range("A1:K1").WrapText = True
+        .Range("A1:K1").VerticalAlignment = xlTop
+        .Columns("E:E").ColumnWidth = 10
+        .Columns("H:H").ColumnWidth = 10
+        .Columns("I:I").ColumnWidth = 12
+        .Columns("J:J").ColumnWidth = 12
+        .Columns("K:K").ColumnWidth = 25
+        .Columns("F:G").EntireColumn.AutoFit
+
+    End With
+    Dim dName As String
+    dName = InputBox("Bitte Signatur des Bandes im Format ""B_II_XXXX"" eingeben:")
+    NeueMetadaten.Range("AA1").Value = dName
+    
+    Dim Zelle As Object
+    Dim counter As Integer
+    counter = 0
+    Dim xteDatei
+    Dim technischeSeite As String
+    For Each Zelle In NeueMetadaten.Range("J2:J" & LZ)
+        counter = 0
+        technischeSeite = NeueMetadaten.Range("C" & Zelle.Row).Value
+NextZelle:
+    Next Zelle
+    Dim dateiname As String
+    dateiname = dName & "_Seitenzahl_Aufbereitung"
+    Application.Dialogs(xlDialogSaveAs).Show (dateiname)
+    'ToDo Cursor auf I2
+    'ToDo Messagebox
+Ende:
+   
+End Sub

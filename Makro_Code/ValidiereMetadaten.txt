@@ -1,0 +1,95 @@
+
+Option Explicit
+
+
+Sub validiereMetadaten_sub(control As IRibbonControl)
+
+    ' Teste ob "ActiveWorkbook" eine Metadatendatei ist
+    If Not IstMetadatenDatei() Then
+        Exit Sub
+    End If
+    
+    MsgBox "Überprüfung erfolgreich abgeschlossen."
+    
+End Sub
+
+
+Private Function IstMetadatenDatei() As Boolean
+
+    IstMetadatenDatei = True
+    
+    If Workbooks.Count = 0 Then
+        MsgBox "Keine Metadaten-Excel-Datei geöffnet."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+          '
+    
+    If ActiveSheet.Range("A1").Value <> "Dokument Id" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte A muss die ""Dokument Id""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("B1").Value <> "Dokument Name" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte B muss die ""Dokument Name""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("C1").Value <> "Region Name" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte C muss die ""SeitenNr""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("D1").Value <> "Seitennr" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte C muss die ""SeitenNr""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("E1").Value <> "Nummer auf Seite" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte D muss die ""Nummer auf Seite""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("F1").Value <> "Text" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte E muss die ""Text""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    Dim text As String
+    text = ActiveSheet.Range("F2").Value
+    If InStr(text, Chr(10)) <> 0 Then
+        MsgBox "Es scheinen die Textregionen an Stelle der Linien exportiert worden zu sein. Bitte Export aus Transkribus mit Einstellung ""Linien exportieren"" wiederholen."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("G1").Value <> "Textregion Id" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte F muss die ""Textregion Id""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("H1").Value <> "Customs" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte G muss die ""Customs""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+    
+    If ActiveSheet.Range("I1").Value <> "Bild" Then
+        MsgBox "Die Datei scheint keine aus Transkribus exportierte Datei zu sein. Die Spalte H muss die ""Bild""-Spalte sein."
+        IstMetadatenDatei = False
+        Exit Function
+    End If
+   
+End Function
+
+
+
+
+
+

@@ -1,0 +1,348 @@
+Public excelDatei As String
+Public regionName As Variant
+Public techSeite As Variant
+Public nrAufSeite As Variant
+Public trText As Variant
+Sub ImportFileTranskribusPN(control As IRibbonControl)
+    Dim Ursprungssheet As Object
+    
+    Set Ursprungssheet = Application.ActiveSheet
+    ' Neue excel Datei oeffnen
+
+    
+    Set NeuesArbeitsbuch = Workbooks.Add
+    Set NeueMetadaten = NeuesArbeitsbuch.Sheets.Add
+    Dim LZ As Long
+    LZ = Ursprungssheet.Cells(Ursprungssheet.Rows.Count, 2).End(xlUp).Row
+    
+    With NeueMetadaten
+        Ursprungssheet.Range("A:A").Copy
+        .Range("A1").PasteSpecial xlPasteValues
+        .Range("A1").Value = "Dokument Id"
+        Ursprungssheet.Range("C:C").Copy
+        .Range("B1").PasteSpecial xlPasteValues
+        .Range("B1").Value = "SeitenNr"
+        Ursprungssheet.Range("F:F").Copy
+        .Range("C1").PasteSpecial xlPasteValues
+        .Range("C1").Value = "Textregion Id"
+        Ursprungssheet.Range("I:I").Copy
+        .Range("D1").PasteSpecial xlPasteValues
+        .Range("D1").Value = "Text"
+        Ursprungssheet.Range("K:K").Copy
+        .Range("E1").PasteSpecial xlPasteValues
+        .Range("E1").Value = "Tag"
+    End With
+
+
+    Dim dateiname As String
+    dateiname = Ursprungssheet.Range("AA1").Value & "_Seitenzahl_Import_Transkribus.csv"
+    With ActiveWorkbook.WebOptions
+        .RelyOnCSS = True
+        .OrganizeInFolder = True
+        .UseLongFileNames = True
+        .DownloadComponents = False
+        .RelyOnVML = False
+        .AllowPNG = True
+        .ScreenSize = msoScreenSize1024x768
+        .PixelsPerInch = 96
+        .Encoding = msoEncodingUTF8
+    End With
+    Application.Dialogs(xlDialogSaveAs).Show dateiname, 6
+
+    'ToDo Cursor auf I2
+    'ToDo Messagebox
+Ende:
+   
+End Sub
+
+Sub ImportFileTranskribus(control As IRibbonControl)
+    Dim Ursprungssheet As Object
+    
+    Set Ursprungssheet = Application.ActiveSheet
+    ' Neue excel Datei oeffnen
+
+    
+    Set NeuesArbeitsbuch = Workbooks.Add
+    Set NeueMetadaten = NeuesArbeitsbuch.Sheets.Add
+    Dim LZ As Long
+    LZ = Ursprungssheet.Cells(Ursprungssheet.Rows.Count, 2).End(xlUp).Row
+    
+    With NeueMetadaten
+        Ursprungssheet.Range("A:A").Copy
+        .Range("A1").PasteSpecial xlPasteValues
+        .Range("A1").Value = "Dokument Id"
+        Ursprungssheet.Range("C:C").Copy
+        .Range("B1").PasteSpecial xlPasteValues
+        .Range("B1").Value = "SeitenNr"
+        Ursprungssheet.Range("F:F").Copy
+        .Range("C1").PasteSpecial xlPasteValues
+        .Range("C1").Value = "Textregion Id"
+        Ursprungssheet.Range("I:I").Copy
+        .Range("D1").PasteSpecial xlPasteValues
+        .Range("D1").Value = "Text"
+        Ursprungssheet.Range("Y:Y").Copy
+        .Range("E1").PasteSpecial xlPasteValues
+        .Range("E1").Value = "Tag"
+    End With
+
+
+    Dim dateiname As String
+    dateiname = Ursprungssheet.Range("AA1").Value & "_Header_Import_Transkribus.csv"
+    Application.Dialogs(xlDialogSaveAs).Show dateiname, 6
+
+    'ToDo Cursor auf I2
+    'ToDo Messagebox
+Ende:
+   
+End Sub
+
+
+Sub AblageFile(control As IRibbonControl)
+    Dim Ursprungssheet As Object
+    
+    Set Ursprungssheet = Application.ActiveSheet
+    Dim LZU As Long
+    LZU = Ursprungssheet.Cells(Ursprungssheet.Rows.Count, 2).End(xlUp).Row
+    Dim iU As Long
+    '--------------------------------------------------------- Neue excel Datei oeffnen
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .InitialFileName = "I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS"
+        .Title = "Wählen Sie die Exceldatei aus Transkribus (alle TR Stufe Linie)"
+        .ButtonName = "Auswahl..."
+        .InitialView = msoFileDialogViewList
+        .AllowMultiSelect = False
+        If .Show = -1 Then
+            excelDatei = .SelectedItems(1)
+        End If
+    End With
+    Dim Datwb As Workbook
+    Set Datwb = Workbooks.Open(excelDatei)
+    Dim Datsheet As Worksheet
+    Set Datsheet = Datwb.Worksheets(1)
+    Dim ZelleA2US As String
+    Dim ZelleA2DS As String
+    ZelleA2US = Ursprungssheet.Cells(2, 1).Value
+    ZelleA2DS = Datsheet.Cells(2, 1).Value
+    'Wenn A2 von Ursprungssheet und Datsheet nicht derselbe Wert Fehlermeldung und beenden.
+    If ZelleA2US <> ZelleA2DS Then
+        MsgBox "Die Doc-IDs der beiden Excel-Listen stimmen nicht überein. Das ausgewählte Excel-Dokument gehört folglich nicht zum vorliegenden Band. Die Prozedur wird abggebrochen."
+        Exit Sub
+    End If
+    
+    Dim rng As Range, i As Integer
+    Dim LZ As Long
+
+    'Duplikate entfernen
+    Datsheet.UsedRange.RemoveDuplicates Columns:=Array(3, 4, 5), Header:=xlYes
+    Datsheet.Columns("G:J").Insert
+    Datsheet.Range("G" & 1).Value = "technische Startseite"
+    Datsheet.Range("H" & 1).Value = "technische Endseite"
+    Datsheet.Range("I" & 1).Value = "original Startseite"
+    Datsheet.Range("J" & 1).Value = "original Endseite"
+    LZ = Datsheet.Cells(Datsheet.Rows.Count, 2).End(xlUp).Row
+    Dim origStartSeite As String
+    Dim origStartSeiteInt As Integer
+    Dim origEndSeite As String
+    Dim origEndSeiteInt As Integer
+    Dim tag As String
+    Dim techStartSeite As String
+    Dim techEndSeite As String
+    Dim techEndSeiteInt As Integer
+    Dim nrStartIndex As Integer
+    Dim nrEndIndex As Integer
+    Dim j As Long
+    
+    For i = 2 To LZ
+    
+    'Wenn page-number speichere Zahl in origStartSeite
+    If Datsheet.Cells(i, 3).Value = "page-number" Then
+        tag = Datsheet.Cells(i, 12).Value
+        nrStartIndex = InStr(tag, "nr:")
+        nrStartIndex = nrStartIndex + 3
+        nrEndIndex = InStr(nrStartIndex, tag, ";}")
+        origStartSeite = Mid(tag, nrStartIndex, nrEndIndex - nrStartIndex)
+        origStartSeiteInt = Int(origStartSeite)
+    'Wenn header, dann...
+    ElseIf InStr(Datsheet.Cells(i, 3).Value, "header") <> 0 Then
+        techStartSeite = Datsheet.Cells(i, 4).Value '...speichere Wert von Transkribus-Startseite in techStartSeite und origStartseite
+        Datsheet.Cells(i, 7).Value = techStartSeite
+        Datsheet.Cells(i, 9).Value = origStartSeite '*
+        'Suche nach Endseiten
+        For j = i + 1 To LZ
+        If Datsheet.Cells(j, 3).Value = "page-number" Then
+         origEndSeite = Replace(Datsheet.Cells(j, 6).Value, ".", "")
+        End If
+        'nächsten header suchen
+        If InStr(Datsheet.Cells(j, 3).Value, "header") <> 0 Then
+            If Datsheet.Cells(j - 1, 3).Value = "page-number" Then
+              
+                    origEndSeiteInt = Int(origEndSeite)
+                    origEndSeiteInt = origEndSeiteInt - 1
+                    origEndSeite = Str(origEndSeiteInt)
+                    
+
+                    If Datsheet.Cells(j - 1, 5).Value = "1" Then 'Wenn page-number auf linken Seite
+                        techEndSeite = Datsheet.Cells(j, 4).Value
+                        techEndSeiteInt = Int(techEndSeite)
+                        techEndSeiteInt = techEndSeiteInt - 1
+                        techEndSeite = Str(techEndSeiteInt)
+                        GoTo EndSeitenGefunden
+                    Else
+                        techEndSeite = Datsheet.Cells(j, 4).Value
+                        GoTo EndSeitenGefunden
+                    End If
+                Else
+                'origEndSeite schon korrekt
+                techEndSeite = Datsheet.Cells(j, 4).Value
+                GoTo EndSeitenGefunden
+                End If
+            End If
+        Next j
+EndSeitenGefunden:
+        
+        
+        'If origEndSeiteInt < origStartSeiteInt Then
+            'origEndSeite = origStartSeite
+        'End If
+                    
+        Datsheet.Cells(i, 8).Value = techEndSeite
+        Datsheet.Cells(i, 10).Value = origEndSeite
+    End If
+    
+    Next i
+    
+    Dim x As Integer
+    For x = LZ To 0 Step -1
+    If Datsheet.Cells(x, 3).Value = "page-number" Then
+        origEndSeite = Replace(Datsheet.Cells(x, 6).Value, ".", "")
+        techEndSeite = Datsheet.Cells(x, 4).Value
+        GoTo LastPageFound
+    End If
+    Next x
+LastPageFound:
+    'Alle Zeilen Löschen, die nicht header
+    For k = LZ To 2 Step -1
+        If InStr(Datsheet.Cells(k, 3).Value, "header") = 0 Then
+        Datsheet.Rows(k).Delete
+        End If
+    Next k
+    
+    LZ = Datsheet.Cells(Datsheet.Rows.Count, 2).End(xlUp).Row
+    Datsheet.Cells(LZ, 10).Value = origEndSeite
+    Datsheet.Cells(LZ, 8).Value = techEndSeite
+    
+    'Für den Fall, wenn mehrere Sitzungen auf der gleichen OrigSeite und endOrigSeite kleiner als startOrigSeite
+    Dim y As Integer
+    For y = 2 To LZ
+    If Int(Datsheet.Cells(y, 10).Value) < Int(Datsheet.Cells(y, 9).Value) Then
+        Datsheet.Cells(y, 10).Value = Datsheet.Cells(y, 9).Value
+    End If
+    Next y
+    
+
+    '------------------------------------------------------------------------------------------------------
+    Set NeuesArbeitsbuch = Workbooks.Add
+    Set Metadaten = NeuesArbeitsbuch.Sheets.Add
+    Metadaten.Range("A" & 1).Value = "Doc-ID"
+    Metadaten.Range("B" & 1).Value = "Technische Startseite in Transkribus"
+    Metadaten.Range("C" & 1).Value = "Technische Endseite in Transkribus"
+    Metadaten.Range("D" & 1).Value = "Original Startseite"
+    Metadaten.Range("E" & 1).Value = "Original Endseite"
+    Metadaten.Range("F" & 1).Value = "Original Text"
+    Metadaten.Range("G" & 1).Value = "Datum"
+    Metadaten.Range("H" & 1).Value = "Vorsitz Funktion"
+    Metadaten.Range("I" & 1).Value = "Vorsitz Vorname"
+    Metadaten.Range("J" & 1).Value = "Vorsitz Nachname"
+    Metadaten.Range("K" & 1).Value = "Vorsitz HLS"
+    Metadaten.Range("L" & 1).Value = "Vorsitz GND"
+    Metadaten.Range("M" & 1).Value = "Gremium"
+    Metadaten.Range("A" & 1).Font.Bold = True
+    Metadaten.Range("F" & 1).Font.Bold = True
+    Metadaten.Range("G" & 1).Font.Bold = True
+    Metadaten.Range("H" & 1).Font.Bold = True
+    Metadaten.Range("I" & 1).Font.Bold = True
+    Metadaten.Range("J" & 1).Font.Bold = True
+    Metadaten.Range("K" & 1).Font.Bold = True
+    Metadaten.Range("L" & 1).Font.Bold = True
+    Metadaten.Range("M" & 1).Font.Bold = True
+    
+    Dim SeiteNrHeader As String
+    Dim SeiteNrHeaderNaechste As String
+    Dim cellcounter As Long
+    cellcounter = 2
+    Dim OrigText As String
+    OrigText = ""
+    For iU = 2 To LZU
+            Metadaten.Range("A" & cellcounter).Value = Ursprungssheet.Cells(iU, 1).Value
+            If Ursprungssheet.Cells(iU, 14).Value <> "" Then
+                Metadaten.Range("G" & cellcounter).Value = Ursprungssheet.Cells(iU, 14).Value
+            End If
+            
+            If Ursprungssheet.Cells(iU, 18).Value <> "" Then
+                Metadaten.Range("H" & cellcounter).Value = Ursprungssheet.Cells(iU, 18).Value
+            End If
+            
+            If Ursprungssheet.Cells(iU, 19).Value <> "" Then
+                Metadaten.Range("I" & cellcounter).Value = Ursprungssheet.Cells(iU, 19).Value
+            End If
+            
+            If Ursprungssheet.Cells(iU, 20).Value <> "" Then
+                Metadaten.Range("J" & cellcounter).Value = Ursprungssheet.Cells(iU, 20).Value
+            End If
+            
+            If Ursprungssheet.Cells(iU, 17).Value <> "" Then
+                Metadaten.Range("K" & cellcounter).Value = Ursprungssheet.Cells(iU, 17).Value
+            End If
+            
+            If Ursprungssheet.Cells(iU, 15).Value <> "" Then
+                Metadaten.Range("L" & cellcounter).Value = Ursprungssheet.Cells(iU, 15).Value
+            End If
+            
+            If Ursprungssheet.Cells(iU, 21).Value <> "" Then
+                Metadaten.Range("M" & cellcounter).Value = Ursprungssheet.Cells(iU, 21).Value
+            End If
+       
+            OrigText = OrigText & Ursprungssheet.Cells(iU, 9).Value & " "
+            OrigText = Replace(OrigText, "¬ ", "")
+            
+            SeiteNrHeader = Ursprungssheet.Cells(iU, 3).Value & Ursprungssheet.Cells(iU, 4).Value
+            
+            SeiteNrHeaderNaechste = Ursprungssheet.Cells(iU + 1, 3).Value & Ursprungssheet.Cells(iU + 1, 4).Value
+            
+            If SeiteNrHeaderNaechste = SeiteNrHeader Then
+            GoTo NextIU
+            Else
+            GoTo Abschliessen
+            End If
+Abschliessen:
+        Metadaten.Range("F" & cellcounter).Value = OrigText
+        SeiteNrHeader = Ursprungssheet.Cells(iU, 3).Value & Ursprungssheet.Cells(iU, 4).Value
+        cellcounter = cellcounter + 1
+        OrigText = ""
+NextIU:
+    Next iU
+        
+        Datsheet.Range("G:J").Copy Metadaten.Range("B:E")
+        Metadaten.Range("B" & 1).Font.Bold = True
+        Metadaten.Range("C" & 1).Font.Bold = True
+        Metadaten.Range("D" & 1).Font.Bold = True
+        Metadaten.Range("E" & 1).Font.Bold = True
+
+
+    Dim dateiname As String
+    dateiname = Ursprungssheet.Range("AA1").Value & "_Metadaten"
+    With ActiveWorkbook.WebOptions
+        .RelyOnCSS = True
+        .OrganizeInFolder = True
+        .UseLongFileNames = True
+        .DownloadComponents = False
+        .RelyOnVML = False
+        .AllowPNG = True
+        .ScreenSize = msoScreenSize1024x768
+        .PixelsPerInch = 96
+        .Encoding = msoEncodingUTF8
+    End With
+    Application.Dialogs(xlDialogSaveAs).Show (dateiname)
+    Datwb.Close SaveChanges:=False
+   
+End Sub

@@ -1,0 +1,29 @@
+Sub taggsBereinigen()
+Sheets("Tabelle2").UsedRange.Replace What:="$d", Replacement:=""
+Sheets("Tabelle2").UsedRange.Replace What:="d$", Replacement:=""
+Sheets("Tabelle2").UsedRange.Replace What:="$p", Replacement:=""
+Sheets("Tabelle2").UsedRange.Replace What:="p$", Replacement:=""
+Sheets("Tabelle2").UsedRange.Replace What:="$o", Replacement:=""
+Sheets("Tabelle2").UsedRange.Replace What:="o$", Replacement:=""
+End Sub
+Sub datumStart()
+
+End Sub
+
+Sub datumEnde()
+
+End Sub
+Sub personStart()
+
+End Sub
+
+Sub personEnde()
+
+End Sub
+Sub orgStart()
+
+End Sub
+Sub orgEnde()
+
+End Sub
+
