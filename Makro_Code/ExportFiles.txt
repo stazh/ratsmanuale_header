@@ -106,7 +106,7 @@ Sub AblageFile(control As IRibbonControl)
     Dim iU As Long
     '--------------------------------------------------------- Neue excel Datei oeffnen
     With Application.FileDialog(msoFileDialogFilePicker)
-        .InitialFileName = "I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanual_B_II_6-1060\Metadaten_und_QS"
+        .InitialFileName = "I:\06_Abteilung_Editionsprojekte\Produktive_Daten_Projekt_PVQ\Ratsmanuale_B_II_6-1060\03_Metadaten_und_QS"
         .Title = "Wählen Sie die Exceldatei aus Transkribus (alle TR Stufe Linie)"
         .ButtonName = "Auswahl..."
         .InitialView = msoFileDialogViewList
