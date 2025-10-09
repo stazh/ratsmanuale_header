@@ -153,7 +153,7 @@ Sub metadatenAufbereiten_sub(control As IRibbonControl)
                 .TintAndShade = 0.599963377788629
             End With
             .Columns("U:U").FormatConditions(1).StopIfTrue = False
-            .Range("U2:U" & LZ).Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="Kleiner Rat, Neuer Rat, Grosser Rat"
+            .Range("U2:U" & LZ).Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="Kleiner Rat, Neuer Rat, Grosser Rat, Geheimer Rat, Kommission"
             .Range("V1").Value = "Date Tag"
             .Range("V2").FormulaR1C1 = "=IF(NOT(RC[-8]=""""),IF(AND(NOT(ISERROR(FIND(""$d"",RC[-10]))),NOT(ISERROR(FIND(""d$"",RC[-10])))),CONCATENATE(""date {offset:"",FIND(""$d"",RC[-10])-1,""; length:"",FIND(""d$"",SUBSTITUTE(RC[-10],""$d"",""""))-FIND(""$d"",RC[-10]),"";year:"",LEFT(RC[-8],4),"";month:"",MID(RC[-8],6,2),"";day:"",RIGHT(RC[-8],2),""}""),IF(NOT(ISERROR(FIND(""$d"",RC[-10]))),CONCATENATE" & _
                     "(""date {offset:"",FIND(""$d"",RC[-10])-1,""; length:"",LEN(RC[-13])-(FIND(""$d"",RC[-10])-1),"";continued:true;year:"",LEFT(RC[-8],4),"";month:"",MID(RC[-8],6,2),"";day:"",RIGHT(RC[-8],2),""}""),CONCATENATE(""date {offset:0; length:"",FIND(""d$"",RC[-10])-1,"";continued:true;year:"",LEFT(RC[-8],4),"";month:"",MID(RC[-8],6,2),"";day:"",RIGHT(RC[-8],2),""}""))),"""")" & _
