@@ -1,17 +1,19 @@
 Option Explicit
-Public DocID As Variant
-Public technische_Startseite As Variant
-Public technische_Endseite As Variant
-Public Original_Startseite As Variant
-Public Original_Endseite As Variant
-Public Original_text As Variant
-Public Datum As Variant
-Public Vorsitz_Funktion As Variant
-Public Vorsitz_Vorname As Variant
-Public Vorsitz_Nachname As Variant
-Public Vorsitz_HLS As Variant
-Public Vorsitz_GND As Variant
-Public Gremium As Variant
+
+' --- VARIABLEN UMBENANNT ZUR VERMEIDUNG VON KONFLIKTEN ---
+Public arrDocID As Variant
+Public arrTechStart As Variant
+Public arrTechEnd As Variant
+Public arrOrigStart As Variant
+Public arrOrigEnd As Variant
+Public arrOrigText As Variant
+Public arrDatum As Variant  ' Hieß vorher Datum (Konfliktpotenzial!)
+Public arrVorsitzFkt As Variant
+Public arrVorsitzVN As Variant
+Public arrVorsitzNN As Variant
+Public arrVorsitzHLS As Variant
+Public arrVorsitzGND As Variant
+Public arrGremium As Variant ' Hieß vorher Gremium (evtl. Modulname?)
 
 Sub Start()
     Dim FSO, ExcelDateien, exceldatei
@@ -50,6 +52,7 @@ Sub Start()
     Dim c1 As Integer
     Dim w As Integer
     Dim julianischesDatum As Boolean
+    Dim LastRow As Long
      
     For Each exceldatei In ExcelDateien
         If Not (exceldatei.Name Like "*Metadaten.xls*") Then
@@ -59,20 +62,30 @@ Sub Start()
          
         Dim Datsheet As Worksheet
         Set Datsheet = exceldoc.Worksheets(1)
+        
+        ' Letzte Zeile sicher ermitteln
+        LastRow = Datsheet.Cells(Datsheet.Rows.Count, 1).End(xlUp).Row
+        
+        ' Sicherheitscheck: Wenn Datei leer, überspringen
+        If LastRow < 2 Then
+            exceldoc.Close SaveChanges:=False
+            GoTo NextExcel
+        End If
          
-        DocID = Datsheet.Range(Cells(2, 1), Cells(Range("A:A").SpecialCells(xlCellTypeLastCell).Row, 1)).Value
-        technische_Startseite = Datsheet.Range(Cells(2, 2), Cells(Range("B:B").SpecialCells(xlCellTypeLastCell).Row, 2)).Value
-        technische_Endseite = Datsheet.Range(Cells(2, 3), Cells(Range("C:C").SpecialCells(xlCellTypeLastCell).Row, 3)).Value
-        Original_Startseite = Datsheet.Range(Cells(2, 4), Cells(Range("D:D").SpecialCells(xlCellTypeLastCell).Row, 4)).Value
-        Original_Endseite = Datsheet.Range(Cells(2, 5), Cells(Range("E:E").SpecialCells(xlCellTypeLastCell).Row, 5)).Value
-        Original_text = Datsheet.Range(Cells(2, 6), Cells(Range("F:F").SpecialCells(xlCellTypeLastCell).Row, 6)).Value
-        Datum = Datsheet.Range(Cells(2, 7), Cells(Range("G:G").SpecialCells(xlCellTypeLastCell).Row, 7)).Value
-        Vorsitz_Funktion = Datsheet.Range(Cells(2, 8), Cells(Range("H:H").SpecialCells(xlCellTypeLastCell).Row, 8)).Value
-        Vorsitz_Vorname = Datsheet.Range(Cells(2, 9), Cells(Range("I:I").SpecialCells(xlCellTypeLastCell).Row, 9)).Value
-        Vorsitz_Nachname = Datsheet.Range(Cells(2, 10), Cells(Range("J:J").SpecialCells(xlCellTypeLastCell).Row, 10)).Value
-        Vorsitz_HLS = Datsheet.Range(Cells(2, 11), Cells(Range("K:K").SpecialCells(xlCellTypeLastCell).Row, 11)).Value
-        Vorsitz_GND = Datsheet.Range(Cells(2, 12), Cells(Range("L:L").SpecialCells(xlCellTypeLastCell).Row, 12)).Value
-        Gremium = Datsheet.Range(Cells(2, 13), Cells(Range("M:M").SpecialCells(xlCellTypeLastCell).Row, 13)).Value
+        ' Daten in die umbenannten Arrays einlesen
+        arrDocID = Datsheet.Range("A2:A" & LastRow).Value
+        arrTechStart = Datsheet.Range("B2:B" & LastRow).Value
+        arrTechEnd = Datsheet.Range("C2:C" & LastRow).Value
+        arrOrigStart = Datsheet.Range("D2:D" & LastRow).Value
+        arrOrigEnd = Datsheet.Range("E2:E" & LastRow).Value
+        arrOrigText = Datsheet.Range("F2:F" & LastRow).Value
+        arrDatum = Datsheet.Range("G2:G" & LastRow).Value
+        arrVorsitzFkt = Datsheet.Range("H2:H" & LastRow).Value
+        arrVorsitzVN = Datsheet.Range("I2:I" & LastRow).Value
+        arrVorsitzNN = Datsheet.Range("J2:J" & LastRow).Value
+        arrVorsitzHLS = Datsheet.Range("K2:K" & LastRow).Value
+        arrVorsitzGND = Datsheet.Range("L2:L" & LastRow).Value
+        arrGremium = Datsheet.Range("M2:M" & LastRow).Value
 
         Datsheet_Result.Range("A1").Value = "Band"
         Datsheet_Result.Range("B1").Value = "technische_Startseite"
@@ -96,16 +109,17 @@ Sub Start()
         BandSign = Replace(exceldatei.Name, "_Metadaten.xlsx", "")
 
         Dim k As Double
-        For k = 1 To UBound(DocID)
+        ' Schleife läuft nun über das umbenannte Array
+        For k = 1 To UBound(arrDocID)
 
         Datsheet_Result.Range("A" & cellcounter).Value = BandSign
-        Datsheet_Result.Range("B" & cellcounter).Value = technische_Startseite(k, 1)
-        Datsheet_Result.Range("C" & cellcounter).Value = technische_Endseite(k, 1)
-        Datsheet_Result.Range("D" & cellcounter).Value = Original_Startseite(k, 1)
-        Datsheet_Result.Range("E" & cellcounter).Value = Original_Endseite(k, 1)
+        Datsheet_Result.Range("B" & cellcounter).Value = arrTechStart(k, 1)
+        Datsheet_Result.Range("C" & cellcounter).Value = arrTechEnd(k, 1)
+        Datsheet_Result.Range("D" & cellcounter).Value = arrOrigStart(k, 1)
+        Datsheet_Result.Range("E" & cellcounter).Value = arrOrigEnd(k, 1)
          
         If k > 1 Then
-            If Original_Startseite(k - 1, 1) = Original_Startseite(k, 1) And Original_Endseite(k - 1, 1) = Original_Endseite(k, 1) Then
+            If arrOrigStart(k - 1, 1) = arrOrigStart(k, 1) And arrOrigEnd(k - 1, 1) = arrOrigEnd(k, 1) Then
                 Datsheet_Result.Range("D" & cellcounter).Interior.ColorIndex = 6
                 Datsheet_Result.Range("E" & cellcounter).Interior.ColorIndex = 6
                 Datsheet_Result.Range("F" & cellcounter).Interior.ColorIndex = 6
@@ -116,36 +130,40 @@ Sub Start()
                 Datsheet_Result.Range("F" & cellcounter - 1).Value = ", Eintrag 1"
             End If
         End If
-        Datsheet_Result.Range("G" & cellcounter).Value = Original_text(k, 1)
+        Datsheet_Result.Range("G" & cellcounter).Value = arrOrigText(k, 1)
          
-        If InStr(LCase(Original_text(k, 1)), "sekel") > 0 Or InStr(LCase(Original_text(k, 1)), "seck") > 0 Then
+        If InStr(LCase(arrOrigText(k, 1)), "sekel") > 0 Or InStr(LCase(arrOrigText(k, 1)), "seck") > 0 Then
             Datsheet_Result.Range("G" & cellcounter).Interior.ColorIndex = 28
         End If
          
-        Datsheet_Result.Range("H" & cellcounter).Value = Datum(k, 1)
+        Datsheet_Result.Range("H" & cellcounter).Value = arrDatum(k, 1)
          
-        If Datum(k, 1) = "" Then
+        If arrDatum(k, 1) = "" Then
             Datsheet_Result.Range("H" & cellcounter).Interior.ColorIndex = 22
-            Datsheet_Result.Range("H" & cellcounter).Value = Datum(k - 1, 1)
+            ' Datum autom. befüllen (gefordert)
+            Datsheet_Result.Range("H" & cellcounter).Value = arrDatum(k - 1, 1)
         End If
          
-        Datsheet_Result.Range("I" & cellcounter).Value = Vorsitz_Funktion(k, 1)
+        ' --- KEINE AUTOMATIK MEHR FÜR I BIS N ---
+        Datsheet_Result.Range("I" & cellcounter).Value = arrVorsitzFkt(k, 1)
         If Datsheet_Result.Range("I" & cellcounter).Value <> "Bürgermeister" And Datsheet_Result.Range("I" & cellcounter).Value <> "" Then
             Datsheet_Result.Range("I" & cellcounter).Interior.ColorIndex = 28
         End If
          
-        Datsheet_Result.Range("J" & cellcounter).Value = Vorsitz_Vorname(k, 1)
-        Datsheet_Result.Range("K" & cellcounter).Value = Vorsitz_Nachname(k, 1)
-        Datsheet_Result.Range("L" & cellcounter).Value = Vorsitz_HLS(k, 1)
-        Datsheet_Result.Range("M" & cellcounter).Value = Vorsitz_GND(k, 1)
-        Datsheet_Result.Range("N" & cellcounter).Value = Gremium(k, 1)
+        Datsheet_Result.Range("J" & cellcounter).Value = arrVorsitzVN(k, 1)
+        Datsheet_Result.Range("K" & cellcounter).Value = arrVorsitzNN(k, 1)
+        Datsheet_Result.Range("L" & cellcounter).Value = arrVorsitzHLS(k, 1)
+        Datsheet_Result.Range("M" & cellcounter).Value = arrVorsitzGND(k, 1)
+        Datsheet_Result.Range("N" & cellcounter).Value = arrGremium(k, 1)
+        ' ----------------------------------------
         
-        Datsheet_Result.Range("P" & cellcounter).Value = DocID(k, 1)
+        Datsheet_Result.Range("P" & cellcounter).Value = arrDocID(k, 1)
          
-        Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/deu/sites/zuercher-ratsmanuale/doc/" & DocID(k, 1) & "/detail?pageid=" & technische_Startseite(k, 1)
+        Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/deu/sites/zuercher-ratsmanuale/doc/" & arrDocID(k, 1) & "/detail?pageid=" & arrTechStart(k, 1)
          
-        If Datum(k, 1) <> "" Then
-            DatArray = Split(Datum(k, 1), ".")
+        ' Datum Logik nutzt jetzt arrDatum
+        If arrDatum(k, 1) <> "" Then
+            DatArray = Split(arrDatum(k, 1), ".")
             Jahr = CInt(DatArray(0))
             Monat = CInt(DatArray(1))
             Tag = CInt(DatArray(2))
@@ -201,6 +219,7 @@ Sub Start()
             Wochentag = getDay(w)
             Datsheet_Result.Range("O" & cellcounter).Value = Wochentag
         Else
+            ' Korrektur: Kopiere von O (Wochentag) darüber, nicht N
             Datsheet_Result.Range("O" & cellcounter).Interior.ColorIndex = 22
             Datsheet_Result.Range("O" & cellcounter).Value = Datsheet_Result.Range("O" & cellcounter - 1).Value
         End If
@@ -294,3 +313,4 @@ Select Case Monat
         getM = 0
 End Select
 End Function
+
