@@ -12,6 +12,7 @@ Public Vorsitz_Nachname As Variant
 Public Vorsitz_HLS As Variant
 Public Vorsitz_GND As Variant
 Public Gremium As Variant
+
 Sub Start()
     Dim FSO, ExcelDateien, exceldatei
     Dim Pfad As String
@@ -29,7 +30,7 @@ Sub Start()
     Dim Datsheet_Result As Worksheet
     Set Datsheet_Result = Wb.Worksheets(1)
     Datsheet_Result.Application.Visible = True
-    
+     
     Dim DatArray() As String
     Dim Jahr As Integer
     Dim Monat As Integer
@@ -49,18 +50,17 @@ Sub Start()
     Dim c1 As Integer
     Dim w As Integer
     Dim julianischesDatum As Boolean
-    
-    
+     
     'erste Zeile (Titel eintragen)
     For Each exceldatei In ExcelDateien
         If Not (exceldatei.Name Like "*Metadaten.xls*") Then
             GoTo NextExcel
         Else
         Set exceldoc = Workbooks.Open(Pfad & "\" & exceldatei.Name)
-        
+         
         Dim Datsheet As Worksheet
         Set Datsheet = exceldoc.Worksheets(1)
-        
+         
         DocID = Datsheet.Range(Cells(2, 1), Cells(Range("A:A").SpecialCells(xlCellTypeLastCell).Row, 1)).Value
         technische_Startseite = Datsheet.Range(Cells(2, 2), Cells(Range("B:B").SpecialCells(xlCellTypeLastCell).Row, 2)).Value
         technische_Endseite = Datsheet.Range(Cells(2, 3), Cells(Range("C:C").SpecialCells(xlCellTypeLastCell).Row, 3)).Value
@@ -75,7 +75,6 @@ Sub Start()
         Vorsitz_GND = Datsheet.Range(Cells(2, 12), Cells(Range("L:L").SpecialCells(xlCellTypeLastCell).Row, 12)).Value
         Gremium = Datsheet.Range(Cells(2, 13), Cells(Range("M:M").SpecialCells(xlCellTypeLastCell).Row, 13)).Value
 
-             
         Datsheet_Result.Range("A1").Value = "Band"
         Datsheet_Result.Range("B1").Value = "technische_Startseite"
         Datsheet_Result.Range("C1").Value = "technische_Endseite"
@@ -93,7 +92,7 @@ Sub Start()
         Datsheet_Result.Range("O1").Value = "Wochentag"
         Datsheet_Result.Range("P1").Value = "Doc-Id"
         Datsheet_Result.Range("Q1").Value = "Weblink"
-        
+         
         Dim BandSign As String
         BandSign = Replace(exceldatei.Name, "_Metadaten.xlsx", "")
 
@@ -105,7 +104,7 @@ Sub Start()
         Datsheet_Result.Range("C" & cellcounter).Value = technische_Endseite(k, 1)
         Datsheet_Result.Range("D" & cellcounter).Value = Original_Startseite(k, 1)
         Datsheet_Result.Range("E" & cellcounter).Value = Original_Endseite(k, 1)
-        
+         
         If k > 1 Then
             If Original_Startseite(k - 1, 1) = Original_Startseite(k, 1) And Original_Endseite(k - 1, 1) = Original_Endseite(k, 1) Then
                 Datsheet_Result.Range("D" & cellcounter).Interior.ColorIndex = 6
@@ -119,29 +118,29 @@ Sub Start()
             End If
         End If
         Datsheet_Result.Range("G" & cellcounter).Value = Original_text(k, 1)
-        
+         
         If InStr(LCase(Original_text(k, 1)), "sekel") > 0 Or InStr(LCase(Original_text(k, 1)), "seck") > 0 Then
             Datsheet_Result.Range("G" & cellcounter).Interior.ColorIndex = 28
         End If
-        
+         
         Datsheet_Result.Range("H" & cellcounter).Value = Datum(k, 1)
-        
+         
         If Datum(k, 1) = "" Then
             Datsheet_Result.Range("H" & cellcounter).Interior.ColorIndex = 22
             Datsheet_Result.Range("H" & cellcounter).Value = Datum(k - 1, 1)
         End If
-        
+         
         Datsheet_Result.Range("I" & cellcounter).Value = Vorsitz_Funktion(k, 1)
-        
+         
         If Vorsitz_Funktion(k, 1) = "" And Not cellcounter < 3 Then
             Datsheet_Result.Range("I" & cellcounter).Interior.ColorIndex = 37
             Datsheet_Result.Range("I" & cellcounter).Value = Vorsitz_Funktion(k - 1, 1)
         End If
-        
+         
         If Datsheet_Result.Range("I" & cellcounter).Value <> "Bürgermeister" Then
             Datsheet_Result.Range("I" & cellcounter).Interior.ColorIndex = 28
         End If
-        
+         
         Datsheet_Result.Range("J" & cellcounter).Value = Vorsitz_Vorname(k, 1)
         If Vorsitz_Vorname(k, 1) = "" And Not cellcounter < 3 Then
             Datsheet_Result.Range("J" & cellcounter).Interior.ColorIndex = 37
@@ -162,16 +161,16 @@ Sub Start()
             Datsheet_Result.Range("M" & cellcounter).Interior.ColorIndex = 37
             Datsheet_Result.Range("M" & cellcounter).Value = Vorsitz_GND(k - 1, 1)
         End If
-        
+         
         Datsheet_Result.Range("N" & cellcounter).Value = Gremium(k, 1)
         If Gremium(k, 1) = "" And Not cellcounter < 3 Then
             Datsheet_Result.Range("N" & cellcounter).Interior.ColorIndex = 35
             Datsheet_Result.Range("N" & cellcounter).Value = Gremium(k - 1, 1)
         End If
         Datsheet_Result.Range("P" & cellcounter).Value = DocID(k, 1)
-        
+         
         Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/deu/sites/zuercher-ratsmanuale/doc/" & DocID(k, 1) & "/detail?pageid=" & technische_Startseite(k, 1)
-        
+         
         If Datum(k, 1) <> "" Then
             DatArray = Split(Datum(k, 1), ".")
             Jahr = CInt(DatArray(0))
@@ -232,39 +231,44 @@ Sub Start()
             Datsheet_Result.Range("O" & cellcounter).Interior.ColorIndex = 22
             Datsheet_Result.Range("O" & cellcounter).Value = Datsheet_Result.Range("N" & cellcounter - 1).Value
         End If
-        
+         
         cellcounter = cellcounter + 1
         Next k
         End If
-    
-exceldoc.Close SaveChanges:=False
+     
+    exceldoc.Close SaveChanges:=False
 
-        
+         
 NextExcel:
     Next
-Datsheet_Result.Name = "Masterdaten"
-Dim Datsheet_Scope As Worksheet
-Set Datsheet_Scope = Wb.Worksheets.Add
-Datsheet_Scope.Name = "Scope-Import"
+    Datsheet_Result.Name = "Masterdaten"
+    Dim Datsheet_Scope As Worksheet
+    Set Datsheet_Scope = Wb.Worksheets.Add
+    Datsheet_Scope.Name = "Scope-Import"
 
-Datsheet_Scope.Range("A1").Value = "Stufe"
-Datsheet_Scope.Range("B1").Value = "Signatur"
-Datsheet_Scope.Range("C1").Value = "Titel"
-Datsheet_Scope.Range("D1").Value = "Inhalt und Form"
-Datsheet_Scope.Range("E1").Value = "Entstehungszeitraum"
-Datsheet_Scope.Range("F1").Value = "Entstehungszeitraum, Anm."
-Datsheet_Scope.Range("G1").Value = "Weblinks"
+    Datsheet_Scope.Range("A1").Value = "Stufe"
+    Datsheet_Scope.Range("B1").Value = "Signatur"
+    Datsheet_Scope.Range("C1").Value = "Titel"
+    Datsheet_Scope.Range("D1").Value = "Inhalt und Form"
+    Datsheet_Scope.Range("E1").Value = "Entstehungszeitraum"
+    Datsheet_Scope.Range("F1").Value = "Entstehungszeitraum, Anm."
+    Datsheet_Scope.Range("G1").Value = "Weblinks"
 
-Datsheet_Scope.Range("A2:A" & cellcounter - 1) = "=""Subdossier"""
-Datsheet_Scope.Range("B2:B" & cellcounter - 1) = "=CONCATENATE(SUBSTITUTE(Masterdaten!RC[-1],""_"","" ""),"" (S. "",IF(Masterdaten!RC[2]=Masterdaten!RC[3],CONCATENATE(Masterdaten!RC[3],Masterdaten!RC[4]),CONCATENATE(Masterdaten!RC[2],""-"",Masterdaten!RC[3])),"")"")"
-Datsheet_Scope.Range("C2:C" & cellcounter - 1) = "=CONCATENATE(""Ratssitzung ("",Masterdaten!RC[11],"") unter dem Vorsitz von "",Masterdaten!RC[6],"" "",Masterdaten!RC[7],"" "",Masterdaten!RC[8])"
-Datsheet_Scope.Range("D2:D" & cellcounter - 1) = "=CONCATENATE(""Originaltitel: "",Masterdaten!RC[3])"
-Datsheet_Scope.Range("E2:E" & cellcounter - 1) = "=CONCATENATE(""x= +"",LEFT(Masterdaten!RC[3],4),RIGHT(LEFT(Masterdaten!RC[3],7),2),RIGHT(Masterdaten!RC[3],2))"
-Datsheet_Scope.Range("F2:F" & cellcounter - 1) = "=Masterdaten!RC[9]"
-Datsheet_Scope.Range("G2:G" & cellcounter - 1) = "=Masterdaten!RC[10]"
+    Datsheet_Scope.Range("A2:A" & cellcounter - 1) = "=""Subdossier"""
+    Datsheet_Scope.Range("B2:B" & cellcounter - 1) = "=CONCATENATE(SUBSTITUTE(Masterdaten!RC[-1],""_"","" ""),"" (S. "",IF(Masterdaten!RC[2]=Masterdaten!RC[3],CONCATENATE(Masterdaten!RC[3],Masterdaten!RC[4]),CONCATENATE(Masterdaten!RC[2],""-"",Masterdaten!RC[3])),"")"")"
+    
+    Datsheet_Scope.Range("C2:C" & cellcounter - 1).FormulaR1C1 = _
+        "=IF(Masterdaten!RC[8]=""""," & _
+        "CONCATENATE(""Ratssitzung ("",Masterdaten!RC[11],"")"")," & _
+        "CONCATENATE(""Ratssitzung ("",Masterdaten!RC[11],"") unter dem Vorsitz von "",Masterdaten!RC[6],"" "",Masterdaten!RC[7],"" "",Masterdaten!RC[8]))"
+    
+    Datsheet_Scope.Range("D2:D" & cellcounter - 1) = "=CONCATENATE(""Originaltitel: "",Masterdaten!RC[3])"
+    Datsheet_Scope.Range("E2:E" & cellcounter - 1) = "=CONCATENATE(""x= +"",LEFT(Masterdaten!RC[3],4),RIGHT(LEFT(Masterdaten!RC[3],7),2),RIGHT(Masterdaten!RC[3],2))"
+    Datsheet_Scope.Range("F2:F" & cellcounter - 1) = "=Masterdaten!RC[9]"
+    Datsheet_Scope.Range("G2:G" & cellcounter - 1) = "=Masterdaten!RC[10]"
 
-MsgBox "Ende erreicht!"
-Wb.SaveAs filename:=Pfad & "\" & "Sitzungsmetadaten_zusammengefügt.xlsx"
+    MsgBox "Ende erreicht!"
+    Wb.SaveAs filename:=Pfad & "\" & "Sitzungsmetadaten_zusammengefügt.xlsx"
 End Sub
 
 Public Function getDay(TagAlsZahl As Integer) As String
@@ -318,4 +322,3 @@ Select Case Monat
         getM = 0
 End Select
 End Function
-
