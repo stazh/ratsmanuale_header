@@ -1,19 +1,19 @@
 Option Explicit
 
-' --- VARIABLEN UMBENANNT ZUR VERMEIDUNG VON KONFLIKTEN ---
+' --- VARIABLEN ---
 Public arrDocID As Variant
 Public arrTechStart As Variant
 Public arrTechEnd As Variant
 Public arrOrigStart As Variant
 Public arrOrigEnd As Variant
 Public arrOrigText As Variant
-Public arrDatum As Variant  ' Hieß vorher Datum (Konfliktpotenzial!)
+Public arrDatum As Variant
 Public arrVorsitzFkt As Variant
 Public arrVorsitzVN As Variant
 Public arrVorsitzNN As Variant
 Public arrVorsitzHLS As Variant
 Public arrVorsitzGND As Variant
-Public arrGremium As Variant ' Hieß vorher Gremium (evtl. Modulname?)
+Public arrGremium As Variant
 
 Sub Start()
     Dim FSO, ExcelDateien, exceldatei
@@ -53,6 +53,8 @@ Sub Start()
     Dim w As Integer
     Dim julianischesDatum As Boolean
     Dim LastRow As Long
+    
+    Dim EintragCount As Integer
      
     For Each exceldatei In ExcelDateien
         If Not (exceldatei.Name Like "*Metadaten.xls*") Then
@@ -63,16 +65,13 @@ Sub Start()
         Dim Datsheet As Worksheet
         Set Datsheet = exceldoc.Worksheets(1)
         
-        ' Letzte Zeile sicher ermitteln
         LastRow = Datsheet.Cells(Datsheet.Rows.Count, 1).End(xlUp).Row
         
-        ' Sicherheitscheck: Wenn Datei leer, überspringen
         If LastRow < 2 Then
             exceldoc.Close SaveChanges:=False
             GoTo NextExcel
         End If
          
-        ' Daten in die umbenannten Arrays einlesen
         arrDocID = Datsheet.Range("A2:A" & LastRow).Value
         arrTechStart = Datsheet.Range("B2:B" & LastRow).Value
         arrTechEnd = Datsheet.Range("C2:C" & LastRow).Value
@@ -108,8 +107,9 @@ Sub Start()
         Dim BandSign As String
         BandSign = Replace(exceldatei.Name, "_Metadaten.xlsx", "")
 
+        EintragCount = 1
+
         Dim k As Double
-        ' Schleife läuft nun über das umbenannte Array
         For k = 1 To UBound(arrDocID)
 
         Datsheet_Result.Range("A" & cellcounter).Value = BandSign
@@ -120,16 +120,27 @@ Sub Start()
          
         If k > 1 Then
             If arrOrigStart(k - 1, 1) = arrOrigStart(k, 1) And arrOrigEnd(k - 1, 1) = arrOrigEnd(k, 1) Then
+                EintragCount = EintragCount + 1
+                
                 Datsheet_Result.Range("D" & cellcounter).Interior.ColorIndex = 6
                 Datsheet_Result.Range("E" & cellcounter).Interior.ColorIndex = 6
                 Datsheet_Result.Range("F" & cellcounter).Interior.ColorIndex = 6
-                Datsheet_Result.Range("D" & cellcounter - 1).Interior.ColorIndex = 6
-                Datsheet_Result.Range("E" & cellcounter - 1).Interior.ColorIndex = 6
-                Datsheet_Result.Range("F" & cellcounter - 1).Interior.ColorIndex = 6
-                Datsheet_Result.Range("F" & cellcounter).Value = ", Eintrag 2"
-                Datsheet_Result.Range("F" & cellcounter - 1).Value = ", Eintrag 1"
+                
+                Datsheet_Result.Range("F" & cellcounter).Value = ", Eintrag " & EintragCount
+                
+                If EintragCount = 2 Then
+                    Datsheet_Result.Range("D" & cellcounter - 1).Interior.ColorIndex = 6
+                    Datsheet_Result.Range("E" & cellcounter - 1).Interior.ColorIndex = 6
+                    Datsheet_Result.Range("F" & cellcounter - 1).Interior.ColorIndex = 6
+                    Datsheet_Result.Range("F" & cellcounter - 1).Value = ", Eintrag 1"
+                End If
+            Else
+                EintragCount = 1
             End If
+        Else
+            EintragCount = 1
         End If
+        
         Datsheet_Result.Range("G" & cellcounter).Value = arrOrigText(k, 1)
          
         If InStr(LCase(arrOrigText(k, 1)), "sekel") > 0 Or InStr(LCase(arrOrigText(k, 1)), "seck") > 0 Then
@@ -140,11 +151,9 @@ Sub Start()
          
         If arrDatum(k, 1) = "" Then
             Datsheet_Result.Range("H" & cellcounter).Interior.ColorIndex = 22
-            ' Datum autom. befüllen (gefordert)
             Datsheet_Result.Range("H" & cellcounter).Value = arrDatum(k - 1, 1)
         End If
          
-        ' --- KEINE AUTOMATIK MEHR FÜR I BIS N ---
         Datsheet_Result.Range("I" & cellcounter).Value = arrVorsitzFkt(k, 1)
         If Datsheet_Result.Range("I" & cellcounter).Value <> "Bürgermeister" And Datsheet_Result.Range("I" & cellcounter).Value <> "" Then
             Datsheet_Result.Range("I" & cellcounter).Interior.ColorIndex = 28
@@ -155,13 +164,11 @@ Sub Start()
         Datsheet_Result.Range("L" & cellcounter).Value = arrVorsitzHLS(k, 1)
         Datsheet_Result.Range("M" & cellcounter).Value = arrVorsitzGND(k, 1)
         Datsheet_Result.Range("N" & cellcounter).Value = arrGremium(k, 1)
-        ' ----------------------------------------
         
         Datsheet_Result.Range("P" & cellcounter).Value = arrDocID(k, 1)
          
         Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/deu/sites/zuercher-ratsmanuale/doc/" & arrDocID(k, 1) & "/detail?pageid=" & arrTechStart(k, 1)
          
-        ' Datum Logik nutzt jetzt arrDatum
         If arrDatum(k, 1) <> "" Then
             DatArray = Split(arrDatum(k, 1), ".")
             Jahr = CInt(DatArray(0))
@@ -219,7 +226,6 @@ Sub Start()
             Wochentag = getDay(w)
             Datsheet_Result.Range("O" & cellcounter).Value = Wochentag
         Else
-            ' Korrektur: Kopiere von O (Wochentag) darüber, nicht N
             Datsheet_Result.Range("O" & cellcounter).Interior.ColorIndex = 22
             Datsheet_Result.Range("O" & cellcounter).Value = Datsheet_Result.Range("O" & cellcounter - 1).Value
         End If
@@ -313,4 +319,3 @@ Select Case Monat
         getM = 0
 End Select
 End Function
-
