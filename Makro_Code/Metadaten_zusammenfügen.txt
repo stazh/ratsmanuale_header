@@ -51,7 +51,6 @@ Sub Start()
     Dim w As Integer
     Dim julianischesDatum As Boolean
      
-    'erste Zeile (Titel eintragen)
     For Each exceldatei In ExcelDateien
         If Not (exceldatei.Name Like "*Metadaten.xls*") Then
             GoTo NextExcel
@@ -131,42 +130,16 @@ Sub Start()
         End If
          
         Datsheet_Result.Range("I" & cellcounter).Value = Vorsitz_Funktion(k, 1)
-         
-        If Vorsitz_Funktion(k, 1) = "" And Not cellcounter < 3 Then
-            Datsheet_Result.Range("I" & cellcounter).Interior.ColorIndex = 37
-            Datsheet_Result.Range("I" & cellcounter).Value = Vorsitz_Funktion(k - 1, 1)
-        End If
-         
-        If Datsheet_Result.Range("I" & cellcounter).Value <> "Bürgermeister" Then
+        If Datsheet_Result.Range("I" & cellcounter).Value <> "Bürgermeister" And Datsheet_Result.Range("I" & cellcounter).Value <> "" Then
             Datsheet_Result.Range("I" & cellcounter).Interior.ColorIndex = 28
         End If
          
         Datsheet_Result.Range("J" & cellcounter).Value = Vorsitz_Vorname(k, 1)
-        If Vorsitz_Vorname(k, 1) = "" And Not cellcounter < 3 Then
-            Datsheet_Result.Range("J" & cellcounter).Interior.ColorIndex = 37
-            Datsheet_Result.Range("J" & cellcounter).Value = Vorsitz_Vorname(k - 1, 1)
-        End If
         Datsheet_Result.Range("K" & cellcounter).Value = Vorsitz_Nachname(k, 1)
-        If Vorsitz_Nachname(k, 1) = "" And Not cellcounter < 3 Then
-            Datsheet_Result.Range("K" & cellcounter).Interior.ColorIndex = 37
-            Datsheet_Result.Range("K" & cellcounter).Value = Vorsitz_Nachname(k - 1, 1)
-        End If
         Datsheet_Result.Range("L" & cellcounter).Value = Vorsitz_HLS(k, 1)
-        If Vorsitz_HLS(k, 1) = "" And Not cellcounter < 3 Then
-            Datsheet_Result.Range("L" & cellcounter).Interior.ColorIndex = 37
-            Datsheet_Result.Range("L" & cellcounter).Value = Vorsitz_HLS(k - 1, 1)
-        End If
         Datsheet_Result.Range("M" & cellcounter).Value = Vorsitz_GND(k, 1)
-        If Vorsitz_GND(k, 1) = "" And Not cellcounter < 3 Then
-            Datsheet_Result.Range("M" & cellcounter).Interior.ColorIndex = 37
-            Datsheet_Result.Range("M" & cellcounter).Value = Vorsitz_GND(k - 1, 1)
-        End If
-         
         Datsheet_Result.Range("N" & cellcounter).Value = Gremium(k, 1)
-        If Gremium(k, 1) = "" And Not cellcounter < 3 Then
-            Datsheet_Result.Range("N" & cellcounter).Interior.ColorIndex = 35
-            Datsheet_Result.Range("N" & cellcounter).Value = Gremium(k - 1, 1)
-        End If
+        
         Datsheet_Result.Range("P" & cellcounter).Value = DocID(k, 1)
          
         Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/deu/sites/zuercher-ratsmanuale/doc/" & DocID(k, 1) & "/detail?pageid=" & technische_Startseite(k, 1)
@@ -229,7 +202,7 @@ Sub Start()
             Datsheet_Result.Range("O" & cellcounter).Value = Wochentag
         Else
             Datsheet_Result.Range("O" & cellcounter).Interior.ColorIndex = 22
-            Datsheet_Result.Range("O" & cellcounter).Value = Datsheet_Result.Range("N" & cellcounter - 1).Value
+            Datsheet_Result.Range("O" & cellcounter).Value = Datsheet_Result.Range("O" & cellcounter - 1).Value
         End If
          
         cellcounter = cellcounter + 1
@@ -237,7 +210,6 @@ Sub Start()
         End If
      
     exceldoc.Close SaveChanges:=False
-
          
 NextExcel:
     Next
