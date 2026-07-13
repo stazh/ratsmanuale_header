@@ -167,7 +167,7 @@ Sub Start()
         
         Datsheet_Result.Range("P" & cellcounter).Value = arrDocID(k, 1)
          
-        Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/deu/sites/zuercher-ratsmanuale/doc/" & arrDocID(k, 1) & "/detail?pageid=" & arrTechStart(k, 1)
+        Datsheet_Result.Range("Q" & cellcounter).Value = "https://app.transkribus.org/sites/zuercher-ratsmanuale/doc/" & arrDocID(k, 1) & "/detail?pageid=" & arrTechStart(k, 1)
          
         If arrDatum(k, 1) <> "" Then
             DatArray = Split(arrDatum(k, 1), ".")
